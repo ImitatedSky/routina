@@ -159,6 +159,7 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                         EntryCard(
                             entry = entry,
                             job = state.jobs[entry.id],
+                            resumableBytes = state.resumable[entry.id] ?: 0L,
                             onOpen = {
                                 if (!FamilyScanner.launch(context, entry.packageName)) {
                                     scope.launch { snackbarHostState.showSnackbar(launchFailed) }
@@ -243,6 +244,7 @@ private fun OfflineNotice(message: String) {
 private fun EntryCard(
     entry: CatalogEntry,
     job: AppJob?,
+    resumableBytes: Long,
     onOpen: () -> Unit,
     onInstall: () -> Unit,
     onRetry: () -> Unit,
@@ -307,7 +309,7 @@ private fun EntryCard(
                 Spacer(Modifier.height(12.dp))
                 JobRow(job, onRetry, onDismissJob, onGrantInstall)
             } else {
-                PrimaryAction(entry, onOpen, onInstall)
+                PrimaryAction(entry, resumableBytes, onOpen, onInstall)
             }
         }
     }
@@ -340,13 +342,26 @@ private fun VersionLine(entry: CatalogEntry) {
 }
 
 @Composable
-private fun PrimaryAction(entry: CatalogEntry, onOpen: () -> Unit, onInstall: () -> Unit) {
+private fun PrimaryAction(
+    entry: CatalogEntry,
+    resumableBytes: Long,
+    onOpen: () -> Unit,
+    onInstall: () -> Unit
+) {
     val installable = entry.remote != null
+    // 上次下載到一半就被中斷（例如行程被系統回收），按下去是接續而不是重來，
+    // 按鈕要說出來，不然使用者會以為又要從頭等一次
+    val resumeLabel = if (resumableBytes > 0) {
+        stringResource(R.string.action_resume, sizeText(resumableBytes))
+    } else {
+        null
+    }
+
     when (entry.status) {
         CatalogEntry.Status.NOT_INSTALLED -> {
             Spacer(Modifier.height(10.dp))
             Button(onClick = onInstall, enabled = installable) {
-                Text(stringResource(R.string.action_install))
+                Text(resumeLabel ?: stringResource(R.string.action_install))
             }
         }
 
@@ -354,7 +369,7 @@ private fun PrimaryAction(entry: CatalogEntry, onOpen: () -> Unit, onInstall: ()
             Spacer(Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = onInstall, enabled = installable) {
-                    Text(stringResource(R.string.action_update))
+                    Text(resumeLabel ?: stringResource(R.string.action_update))
                 }
                 OutlinedButton(onClick = onOpen) { Text(stringResource(R.string.action_open)) }
             }

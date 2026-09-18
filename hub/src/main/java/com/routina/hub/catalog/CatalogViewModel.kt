@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.routina.core.contract.Capability
 import com.routina.core.contract.FamilyApp
 import com.routina.core.contract.FamilyScanner
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /** 目錄裡的一列：把「本機裝了什麼」與「遠端有什麼」合成一個畫面用的模型 */
 data class CatalogEntry(
@@ -60,6 +62,8 @@ sealed interface AppJob {
 data class CatalogUiState(
     val entries: List<CatalogEntry> = emptyList(),
     val jobs: Map<String, AppJob> = emptyMap(),
+    /** 成員 id → 快取裡已經下載了多少位元組。行程被回收後靠它讓按鈕說得出「繼續下載」 */
+    val resumable: Map<String, Long> = emptyMap(),
     val loading: Boolean = false,
     /** 名冊本身讀不到時的提示。此時仍會列出已安裝的成員 */
     val registryError: String? = null
@@ -125,9 +129,12 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
                 .map { it.id }
                 .toSet()
 
+            val resumable = resumableBytes(sorted)
+
             _state.update { current ->
                 current.copy(
                     entries = sorted,
+                    resumable = resumable,
                     jobs = current.jobs.filterNot { (id, job) ->
                         job is AppJob.HandedOff && id in settled
                     },
@@ -210,19 +217,27 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
         val remote = entry.remote ?: return
         val app = getApplication<Application>()
 
+        // 同一個成員只跑一份下載。續傳是用 append 寫的，兩份同時寫同一個 .part 會把檔案寫壞
+        val running = _state.value.jobs[entry.id]
+        if (running is AppJob.Downloading || running == AppJob.Verifying) return
+
         viewModelScope.launch {
-            setJob(entry.id, AppJob.Downloading(null, 0, remote.sizeBytes))
+            // 從既有的殘檔接起，進度數字才不會先閃一下 0
+            val already = _state.value.resumable[entry.id] ?: 0L
+            setJob(entry.id, AppJob.Downloading(null, already, remote.sizeBytes))
 
             val downloaded = ApkDownloader.download(
                 context = app,
                 url = remote.downloadUrl,
-                fileName = "${entry.id}-${remote.version}.apk"
+                fileName = apkFileName(entry.id, remote),
+                expectedSize = remote.sizeBytes
             ) { done, total ->
                 val known = if (total > 0) total else remote.sizeBytes
                 val fraction = if (known > 0) (done.toFloat() / known).coerceIn(0f, 1f) else null
                 setJob(entry.id, AppJob.Downloading(fraction, done, known))
             }.getOrElse { error ->
                 setJob(entry.id, AppJob.Failed(error.message ?: "下載失敗"))
+                refreshResumable()
                 return@launch
             }
 
@@ -259,6 +274,24 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
 
     fun clearJob(id: String) {
         _state.update { it.copy(jobs = it.jobs - id) }
+    }
+
+    /** 快取裡的檔名。帶版本才不會讓不同版本的殘檔混在一起 */
+    private fun apkFileName(id: String, remote: RemoteVersion) = "$id-${remote.version}.apk"
+
+    private suspend fun resumableBytes(entries: List<CatalogEntry>): Map<String, Long> =
+        withContext(Dispatchers.IO) {
+            val app = getApplication<Application>()
+            entries.mapNotNull { entry ->
+                val remote = entry.remote ?: return@mapNotNull null
+                val bytes = ApkDownloader.resumableBytes(app, apkFileName(entry.id, remote))
+                if (bytes > 0) entry.id to bytes else null
+            }.toMap()
+        }
+
+    private suspend fun refreshResumable() {
+        val bytes = resumableBytes(_state.value.entries)
+        _state.update { it.copy(resumable = bytes) }
     }
 
     private fun setJob(id: String, job: AppJob) {

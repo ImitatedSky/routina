@@ -14,6 +14,7 @@
     <string name="action_refresh">重新整理</string>
     <string name="action_install">安裝</string>
     <string name="action_update">更新</string>
+    <string name="action_resume">繼續下載（已有 %1$s）</string>
     <string name="action_retry">重試</string>
     <string name="action_dismiss">關閉</string>
     <string name="action_ok">好</string>
