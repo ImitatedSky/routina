@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Routina</string>
+
+    <string name="directory_title">Routina</string>
+    <string name="directory_subtitle">家族目錄</string>
+
+    <string name="empty_title">還沒有家族成員</string>
+    <string name="empty_body">家族成員是各自獨立安裝的 App。裝好之後會自動出現在這裡，不需要設定。</string>
+
+    <string name="action_open">開啟</string>
+    <string name="action_app_info">App 資訊</string>
+    <string name="action_refresh">重新掃描</string>
+
+    <string name="launch_failed">開不起來，這個成員可能沒有主畫面</string>
+    <string name="capabilities_none">沒有對外開放的能力</string>
+</resources>

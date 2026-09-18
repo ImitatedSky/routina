@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Hub 不需要任何權限。掃描家族成員靠的是 :core:contract 帶進來的
+      <queries> 套件可見性宣告，那不是權限，使用者不必授權任何東西。
+
+      之後 v0.3 做「從 GitHub 下載安裝」才會需要 INTERNET 與
+      REQUEST_INSTALL_PACKAGES —— 到那時再加，現在保持零權限。
+    -->
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Routina">
+
+        <!--
+          Hub 自己也是家族的一員：它會被子 App 反向掃到（例如 Flow 要呼叫
+          Hub 的能力時）。Hub 掃描時會排除自己，所以不會出現在自己的目錄裡。
+        -->
+        <meta-data
+            android:name="com.routina.family.member"
+            android:value="true" />
+        <meta-data
+            android:name="com.routina.family.id"
+            android:value="hub" />
+        <meta-data
+            android:name="com.routina.family.name"
+            android:value="Routina" />
+        <meta-data
+            android:name="com.routina.family.summary"
+            android:value="家族目錄與管理" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      掃描家族成員需要看得見別的 App。Android 11 起套件預設互相不可見，
+      這裡只宣告「有啟動圖示的 App」這一類可見性 —— 家族成員都有啟動圖示，
+      夠用且比 QUERY_ALL_PACKAGES 收斂得多（那個權限會讀到裝置上全部套件）。
+      放在 library 而不是各 App 的 manifest：這是掃描能運作的前提，
+      屬於 contract 自己的需求，用到它的 App 不該還要記得補一段。
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+</manifest>
