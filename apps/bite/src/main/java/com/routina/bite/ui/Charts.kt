@@ -295,7 +295,8 @@ fun DrawScope.drawSelectionGuide(plot: Plot, index: Int, color: Color) {
 }
 
 /** 點下去之後找最接近的那一天。差超過 [tolerance] 天就當作沒點到 */
-fun nearestIndex(marks: List<Mark>, index: Int, tolerance: Int = 1): Int? =
-    marks.minByOrNull { abs(it.index - index) }
+fun nearestIndex(marks: List<Mark?>, index: Int, tolerance: Int = 1): Int? =
+    marks.filterNotNull()
+        .minByOrNull { abs(it.index - index) }
         ?.takeIf { abs(it.index - index) <= tolerance }
         ?.index

@@ -221,7 +221,7 @@ private fun KcalTab(
         ChartCanvas(
             height = CHART_HEIGHT,
             onTapIndex = { index ->
-                onSelect(nearestIndex(marks, index)?.let { span.dateAt(it) })
+                onSelect(nearestIndex(marks, index, tapTolerance(span))?.let { span.dateAt(it) })
             }
         ) { holder ->
             val plot = drawChartFrame(holder, axis, span, measurer, labelStyle, grid) {
@@ -312,7 +312,7 @@ private fun WeightTab(
         ChartCanvas(
             height = CHART_HEIGHT,
             onTapIndex = { index ->
-                onSelect(nearestIndex(marks, index)?.let { span.dateAt(it) })
+                onSelect(nearestIndex(marks, index, tapTolerance(span))?.let { span.dateAt(it) })
             }
         ) { holder ->
             val plot = drawChartFrame(
@@ -500,9 +500,9 @@ private fun MacroMiniChart(
     onSelect: (String?) -> Unit,
     value: (Nutrients) -> Double
 ) {
-    val marks = days.map { Mark(span.indexOf(it.date), value(it.total)) }
+    val marks = macroMarks(days, span, value)
     val axis = axisFor(
-        marks.map { it.value } + listOfNotNull(target?.toDouble()),
+        marks.filterNotNull().map { it.value } + listOfNotNull(target?.toDouble()),
         zeroBased = true
     )
 
@@ -526,7 +526,7 @@ private fun MacroMiniChart(
     Spacer(modifier = Modifier.height(4.dp))
     ChartCanvas(
         height = MINI_CHART_HEIGHT,
-        onTapIndex = { index -> onSelect(nearestIndex(marks, index)?.let { span.dateAt(it) }) }
+        onTapIndex = { index -> onSelect(nearestIndex(marks, index, tapTolerance(span))?.let { span.dateAt(it) }) }
     ) { holder ->
         val plot = drawChartFrame(holder, axis, span, measurer, labelStyle, grid) {
             formatKcal(it).toString()
@@ -538,6 +538,36 @@ private fun MacroMiniChart(
         drawSeriesLine(plot, marks, color, strokeDp = 2f)
     }
 }
+
+/**
+ * 每日攝取量的折線點。相鄰兩筆隔超過 [LINE_GAP_DAYS] 天就插一個 null 把線斷開——
+ * 中間那段一筆紀錄都沒有，連起來會被讀成「攝取量慢慢降下去」。
+ * 體重折線沒有這個問題：兩次量測之間的內插是有意義的。
+ */
+private fun macroMarks(
+    days: List<DayTotal>,
+    span: DateSpan,
+    value: (Nutrients) -> Double
+): List<Mark?> {
+    val marks = mutableListOf<Mark?>()
+    var previousIndex: Int? = null
+    for (day in days) {
+        val index = span.indexOf(day.date)
+        if (previousIndex != null && index - previousIndex > LINE_GAP_DAYS) marks.add(null)
+        marks.add(Mark(index, value(day.total)))
+        previousIndex = index
+    }
+    return marks
+}
+
+/** 超過一週沒紀錄就不把兩端連起來，與 7 日平均的視窗一致 */
+private const val LINE_GAP_DAYS = 7
+
+/**
+ * 點按時允許差幾天才算點到。區間越長每一天越窄（「全部」一天可能只有兩三 dp），
+ * 固定一天的容差會讓手指幾乎點不中，所以按區間長度放大到大約一根手指的寬度。
+ */
+private fun tapTolerance(span: DateSpan): Int = maxOf(1, span.dayCount / 30)
 
 // ---------- 共用零件 ----------
 
