@@ -231,7 +231,14 @@ private fun AmountDialog(food: Food, onAdd: (Double) -> Unit, onDismiss: () -> U
     var grams by remember {
         mutableStateOf(if (servingGrams == null) "" else formatGrams(servingGrams))
     }
-    val amount = servings.toDoubleOrNull()
+    // 最後改的是公克欄時，份數要用公克直接除回去算。份數欄顯示的是四捨五入過的文字，
+    // 拿它當真值會把 150 g 存成 150.6 g。
+    var gramsEditedLast by remember { mutableStateOf(false) }
+    val amount = if (gramsEditedLast && servingGrams != null && servingGrams > 0.0) {
+        grams.toDoubleOrNull()?.let { it / servingGrams }
+    } else {
+        servings.toDoubleOrNull()
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -242,6 +249,7 @@ private fun AmountDialog(food: Food, onAdd: (Double) -> Unit, onDismiss: () -> U
                     value = servings,
                     onValueChange = { input ->
                         servings = input
+                        gramsEditedLast = false
                         if (servingGrams != null) {
                             val value = input.toDoubleOrNull()
                             grams = if (value == null) "" else formatGrams(value * servingGrams)
@@ -255,6 +263,7 @@ private fun AmountDialog(food: Food, onAdd: (Double) -> Unit, onDismiss: () -> U
                         value = grams,
                         onValueChange = { input ->
                             grams = input
+                            gramsEditedLast = true
                             val value = input.toDoubleOrNull()
                             servings = if (value == null) "" else formatAmount(value / servingGrams)
                         },

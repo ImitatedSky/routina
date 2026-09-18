@@ -1,6 +1,7 @@
 package com.routina.bite.ui
 
 import com.routina.bite.data.parseDate
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -20,5 +21,11 @@ fun formatAmount(value: Double): String =
     else String.format(Locale.TAIWAN, "%.2f", value).trimEnd('0').trimEnd('.')
 
 private val dayLabel = DateTimeFormatter.ofPattern("M月d日（E）", Locale.TAIWAN)
+private val dayLabelWithYear = DateTimeFormatter.ofPattern("yyyy年M月d日（E）", Locale.TAIWAN)
 
-fun formatDayLabel(date: String): String = parseDate(date).format(dayLabel)
+/** 不是今年的日期才帶年份，歷史列表裡跨年的日子才分得出來 */
+fun formatDayLabel(date: String): String {
+    val parsed = parseDate(date)
+    val pattern = if (parsed.year == LocalDate.now().year) dayLabel else dayLabelWithYear
+    return parsed.format(pattern)
+}

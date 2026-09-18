@@ -148,22 +148,24 @@ fun TodayScreen(
                 }
             }
 
-            // 四個餐別固定顯示（空的也在，才能直接加進那一餐）；未分餐只有在有資料時才出現
-            Meal.entries.forEach { meal ->
-                mealSection(
-                    meal = meal,
-                    entries = entries.filter { it.meal == meal },
-                    onAdd = { onAdd(date, meal) },
-                    onClick = { editing = it },
-                    onDelete = { deleting = it }
-                )
-            }
+            // 未分餐（匯入的舊資料）只有在有資料時才出現，而且放最前面：
+            // 那種日子四個餐別都是空的，排在後面會讓整天看起來像沒紀錄
             val unassigned = entries.filter { it.meal == null }
             if (unassigned.isNotEmpty()) {
                 mealSection(
                     meal = null,
                     entries = unassigned,
                     onAdd = null,
+                    onClick = { editing = it },
+                    onDelete = { deleting = it }
+                )
+            }
+            // 四個餐別固定顯示（空的也在，才能直接加進那一餐）
+            Meal.entries.forEach { meal ->
+                mealSection(
+                    meal = meal,
+                    entries = entries.filter { it.meal == meal },
+                    onAdd = { onAdd(date, meal) },
                     onClick = { editing = it },
                     onDelete = { deleting = it }
                 )
