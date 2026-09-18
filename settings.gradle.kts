@@ -28,3 +28,6 @@ include(":hub")
 
 // 共用層。contract 是「家族契約」的實作：掃描成員、讀能力、組 Intent。
 include(":core:contract")
+
+// 家族成員：Routina Bite（熱量飲食紀錄）
+include(":apps:bite")
