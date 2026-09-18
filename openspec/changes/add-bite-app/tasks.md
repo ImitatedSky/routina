@@ -39,5 +39,5 @@
 - [x] 5.1 `./gradlew assembleRelease` 全 module 綠燈（debug 簽章 fallback）
 - [x] 5.2 BlueStacks 端到端：首次啟動食物庫 78 種；份數新增、公克新增、快速輸入、改餐別、⋯ 刪除、複製昨天、每日備註、歷史列表、體重增改刪、目標修改後今日頁即時更新
 - [x] 5.3 BlueStacks 備份：匯出檔含四個集合與 targets；匯入 `bite-import.json` 後 78 食物／184 筆／31 天／7 體重／備註「感冒日」；再匯入一次數量不變
-- [ ] 5.4 BlueStacks 家族：Hub 目錄看到「Routina Bite／熱量飲食紀錄」並可開啟；adb 呼叫 `open_today` 帶起今日頁；Hub 對 Bite 顯示「查不到可安裝的版本」（尚未發版）、對自己仍解析到 v0.3.x
-- [ ] 5.5 commit（英文、無 co-author）、push main；不打 tag
+- [x] 5.4 BlueStacks 家族：Hub 目錄看到「Routina Bite／熱量飲食紀錄」並可開啟；adb 呼叫 `open_today` 帶起今日頁；Hub 對 Bite 顯示「查不到可安裝的版本」（尚未發版）、對自己仍解析到 v0.3.x
+- [x] 5.5 commit（英文、無 co-author）、push main；不打 tag
