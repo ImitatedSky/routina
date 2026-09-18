@@ -1,0 +1,1484 @@
+[
+  {
+    "id": "2f1718ea-3daa-5782-beca-fb597343618f",
+    "name": "蛋白質",
+    "servingGrams": 1.0,
+    "nutrients": {
+      "kcal": 4.0,
+      "protein": 1.0,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "每 1 g 的參考值，快速估算用",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "45d5dd31-c94c-5132-b1a5-f51ac8ba2e42",
+    "name": "脂肪",
+    "servingGrams": 1.0,
+    "nutrients": {
+      "kcal": 9.0,
+      "protein": 0.0,
+      "fat": 1.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "每 1 g 的參考值，快速估算用",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "8a8066fc-1984-5ffb-a478-bfd2ed2c174a",
+    "name": "糖",
+    "servingGrams": 1.0,
+    "nutrients": {
+      "kcal": 4.0,
+      "protein": 0.0,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 1.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "每 1 g 的參考值，快速估算用",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "34c3a650-cb84-5141-be37-7fa37d02d557",
+    "name": "The vegan 高蛋白(豆漿)",
+    "servingGrams": 40.0,
+    "nutrients": {
+      "kcal": 175.6,
+      "protein": 26.16,
+      "fat": 4.56,
+      "satFat": 1.8,
+      "transFat": 0.0,
+      "carbs": 8.12,
+      "sugar": 1.6,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "c9e88d0d-51e5-5e03-8b57-078bc34bcadc",
+    "name": "The vegan 高蛋白(芝麻)",
+    "servingGrams": 40.0,
+    "nutrients": {
+      "kcal": 168.32,
+      "protein": 21.48,
+      "fat": 4.96,
+      "satFat": 2.0,
+      "transFat": 0.0,
+      "carbs": 10.04,
+      "sugar": 0.52,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "5fc05420-138d-58ce-aebd-8dd5fcd79974",
+    "name": "BSN Syntha-6 香草",
+    "servingGrams": 47.0,
+    "nutrients": {
+      "kcal": 193.0,
+      "protein": 22.0,
+      "fat": 5.0,
+      "satFat": 2.0,
+      "transFat": 0.0,
+      "carbs": 15.0,
+      "sugar": 4.0,
+      "sodium": 180.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "97f9e523-7ede-5fb6-ae25-0b02e58c1e92",
+    "name": "鮭魚生魚片",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 178.0,
+      "protein": 22.0,
+      "fat": 10.0,
+      "satFat": 6.3,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "9514a771-722a-52d2-9354-b0e247f0c652",
+    "name": "鮪魚生魚片",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 140.0,
+      "protein": 24.0,
+      "fat": 1.5,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "90fe9de9-811b-585a-8b47-414c94898182",
+    "name": "鮭魚肚",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 260.0,
+      "protein": 20.0,
+      "fat": 22.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "9d8f007a-1a1d-5a86-b94c-611398027f80",
+    "name": "雞胸肉",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 119.0,
+      "protein": 20.0,
+      "fat": 1.5,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "d130e107-2e80-500c-9173-84e747634ab8",
+    "name": "白飯",
+    "servingGrams": 150.0,
+    "nutrients": {
+      "kcal": 220.0,
+      "protein": 8.0,
+      "fat": 0.3,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 60.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "11e238d6-b52a-5604-847d-1373a38e6f6a",
+    "name": "光泉牛奶",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 66.1,
+      "protein": 3.3,
+      "fat": 3.7,
+      "satFat": 2.5,
+      "transFat": 0.0,
+      "carbs": 4.9,
+      "sugar": 4.8,
+      "sodium": 45.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "e2782c4e-1dac-522f-bec8-ce023ea1c8f1",
+    "name": "牛奶(家）",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 64.4,
+      "protein": 3.4,
+      "fat": 3.6,
+      "satFat": 2.3,
+      "transFat": 0.0,
+      "carbs": 4.6,
+      "sugar": 4.6,
+      "sodium": 42.9,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "afa7aa45-8ac9-51e4-99fe-76d726fe0ad5",
+    "name": "統一陽光無加糖高纖豆漿",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 40.7,
+      "protein": 3.4,
+      "fat": 1.9,
+      "satFat": 0.3,
+      "transFat": 0.0,
+      "carbs": 3.5,
+      "sugar": 0.8,
+      "sodium": 2.2,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "915843c0-1fad-50da-888f-68a1c9063218",
+    "name": "統一陽光陽光黃金豆豆漿",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 58.5,
+      "protein": 3.5,
+      "fat": 2.1,
+      "satFat": 0.4,
+      "transFat": 0.0,
+      "carbs": 6.4,
+      "sugar": 4.8,
+      "sodium": 27.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "14d72dae-2946-523c-a0f6-ff0ab22c649f",
+    "name": "小美香草冰淇淋",
+    "servingGrams": 85.0,
+    "nutrients": {
+      "kcal": 140.0,
+      "protein": 1.9,
+      "fat": 6.8,
+      "satFat": 6.8,
+      "transFat": 0.0,
+      "carbs": 17.9,
+      "sugar": 13.3,
+      "sodium": 48.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "e28d4b75-aba4-5912-ab49-0cfaed68a835",
+    "name": "卜蜂 冷藏松露菌菇雞胸肉",
+    "servingGrams": 140.0,
+    "nutrients": {
+      "kcal": 179.2,
+      "protein": 29.0,
+      "fat": 5.5,
+      "satFat": 0.8,
+      "transFat": 0.0,
+      "carbs": 3.4,
+      "sugar": 0.0,
+      "sodium": 728.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f89491f6-68b7-51f4-a49c-62a9bf76bb21",
+    "name": "十三香翅中翅腿(好事多)",
+    "servingGrams": 416.67,
+    "nutrients": {
+      "kcal": 696.25,
+      "protein": 67.5,
+      "fat": 41.25,
+      "satFat": 11.67,
+      "transFat": 0.0,
+      "carbs": 13.75,
+      "sugar": 4.17,
+      "sodium": 1414.17,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "54dbe68b-f570-56d2-9c12-49534b480944",
+    "name": "台灣碳烤風味豬里肌肉片(好事多)",
+    "servingGrams": 400.0,
+    "nutrients": {
+      "kcal": 736.0,
+      "protein": 60.4,
+      "fat": 42.8,
+      "satFat": 16.0,
+      "transFat": 0.0,
+      "carbs": 26.8,
+      "sugar": 23.2,
+      "sodium": 2460.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "1356f44c-316e-5453-a455-1c7d1ca72c45",
+    "name": "冷凍蝦子(好事多)",
+    "servingGrams": 112.0,
+    "nutrients": {
+      "kcal": 93.0,
+      "protein": 22.0,
+      "fat": 0.6,
+      "satFat": 0.2,
+      "transFat": 0.0,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 313.6,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "69334af7-8a2f-5fd4-8a13-9f03ea468b85",
+    "name": "活力養生蛋(白色蛋)",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 158.0,
+      "protein": 12.1,
+      "fat": 11.2,
+      "satFat": 11.2,
+      "transFat": 0.0,
+      "carbs": 1.2,
+      "sugar": 0.0,
+      "sodium": 138.0,
+      "cholesterol": 380.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "14e49f83-8ee7-5aa7-81bd-f2811a0cd111",
+    "name": "茶葉蛋",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 158.0,
+      "protein": 12.1,
+      "fat": 11.2,
+      "satFat": 11.2,
+      "transFat": 0.0,
+      "carbs": 1.2,
+      "sugar": 0.0,
+      "sodium": 438.0,
+      "cholesterol": 380.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f898d807-0182-579d-b87c-b9239d5955bd",
+    "name": "雞腿便當(池上)",
+    "servingGrams": 550.0,
+    "nutrients": {
+      "kcal": 904.0,
+      "protein": 62.3,
+      "fat": 29.3,
+      "satFat": 2.5,
+      "transFat": 0.0,
+      "carbs": 97.7,
+      "sugar": 4.1,
+      "sodium": 782.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "b52d0efc-59a7-5732-9fea-3bd736458a05",
+    "name": "雞排便當(池上)",
+    "servingGrams": 550.0,
+    "nutrients": {
+      "kcal": 975.0,
+      "protein": 65.9,
+      "fat": 14.1,
+      "satFat": 2.4,
+      "transFat": 0.0,
+      "carbs": 146.1,
+      "sugar": 6.4,
+      "sodium": 1589.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "00d6a480-1301-5142-aed0-0a62c8be2e7b",
+    "name": "希臘式優格 (好事多)",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 59.0,
+      "protein": 9.4,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 5.3,
+      "sugar": 2.9,
+      "sodium": 29.4,
+      "cholesterol": 94.1
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f74f1b9b-054f-54b0-b2a7-4f94b1757b79",
+    "name": "藍莓 (好事多)",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 66.8,
+      "protein": 0.4,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 16.3,
+      "sugar": 12.7,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "b975889a-abfc-595d-8948-5c80e9817b12",
+    "name": "起司片快樂牛",
+    "servingGrams": 20.0,
+    "nutrients": {
+      "kcal": 38.2,
+      "protein": 3.6,
+      "fat": 2.2,
+      "satFat": 1.6,
+      "transFat": 0.1,
+      "carbs": 1.0,
+      "sugar": 1.0,
+      "sodium": 264.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "aa587a34-80f6-54b5-8cab-8d746f7bc0b1",
+    "name": "馬鈴薯(1顆)",
+    "servingGrams": 100.0,
+    "nutrients": {
+      "kcal": 74.0,
+      "protein": 2.6,
+      "fat": 0.2,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 15.8,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f00e3102-87f5-5ff4-adce-ad511d317417",
+    "name": "蛤蠣湯",
+    "servingGrams": 300.0,
+    "nutrients": {
+      "kcal": 80.0,
+      "protein": 10.0,
+      "fat": 2.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 5.0,
+      "sugar": 0.0,
+      "sodium": 400.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "11ce5437-d684-5ac6-ac9b-fcd010e74d62",
+    "name": "水餃",
+    "servingGrams": 25.0,
+    "nutrients": {
+      "kcal": 50.0,
+      "protein": 2.0,
+      "fat": 2.5,
+      "satFat": 0.9,
+      "transFat": 0.0,
+      "carbs": 5.5,
+      "sugar": 0.0,
+      "sodium": 100.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "1e8e3ab6-8cb2-59b1-98a4-38c0faffab8c",
+    "name": "嫩切雞肉Sliced Chicken",
+    "servingGrams": 207.0,
+    "nutrients": {
+      "kcal": 300.0,
+      "protein": 20.0,
+      "fat": 6.3,
+      "satFat": 2.7,
+      "transFat": 0.2,
+      "carbs": 41.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "2a19f1e8-4eb3-5399-917c-a5a673b9ff71",
+    "name": "照燒雞肉Chicken Teriyaki",
+    "servingGrams": 257.0,
+    "nutrients": {
+      "kcal": 362.0,
+      "protein": 27.0,
+      "fat": 7.3,
+      "satFat": 2.6,
+      "transFat": 0.2,
+      "carbs": 46.0,
+      "sugar": 11.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "ddaa94dc-9be1-5522-8600-de522999fdd7",
+    "name": "鮮嫩雞柳Chicken Strips",
+    "servingGrams": 229.0,
+    "nutrients": {
+      "kcal": 324.0,
+      "protein": 25.0,
+      "fat": 7.1,
+      "satFat": 2.5,
+      "transFat": 0.2,
+      "carbs": 39.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "b3eda2e3-1ef9-5425-8936-f9617aff2ea3",
+    "name": "香烤雞肉Roasted Chicken Breast",
+    "servingGrams": 232.0,
+    "nutrients": {
+      "kcal": 331.0,
+      "protein": 23.0,
+      "fat": 8.0,
+      "satFat": 3.2,
+      "transFat": 0.2,
+      "carbs": 41.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "69a5ea00-2407-51f8-8bb5-0a686ac40120",
+    "name": "火腿Ham",
+    "servingGrams": 221.0,
+    "nutrients": {
+      "kcal": 317.0,
+      "protein": 19.0,
+      "fat": 7.3,
+      "satFat": 3.1,
+      "transFat": 0.2,
+      "carbs": 44.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "d830588b-3bee-5002-b770-6d9d81480ea9",
+    "name": "義大利牛肉丸Italian Meatballs",
+    "servingGrams": 255.0,
+    "nutrients": {
+      "kcal": 383.0,
+      "protein": 20.0,
+      "fat": 11.7,
+      "satFat": 5.4,
+      "transFat": 0.2,
+      "carbs": 47.0,
+      "sugar": 8.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "283ee77b-cb5d-5401-80c9-b59230e63189",
+    "name": "燒烤牛肉Roast Beef",
+    "servingGrams": 224.0,
+    "nutrients": {
+      "kcal": 346.0,
+      "protein": 21.0,
+      "fat": 7.1,
+      "satFat": 3.1,
+      "transFat": 0.2,
+      "carbs": 40.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f17bdd54-2742-59ce-834b-dbc8cea14bdf",
+    "name": "墨西哥辣牛Taco Beef",
+    "servingGrams": 211.0,
+    "nutrients": {
+      "kcal": 320.0,
+      "protein": 17.0,
+      "fat": 8.9,
+      "satFat": 3.6,
+      "transFat": 0.2,
+      "carbs": 42.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "1e6a0120-1cb0-5c25-87e1-d8a1bb617274",
+    "name": "義大利經典Italian B.M.TTM",
+    "servingGrams": 229.0,
+    "nutrients": {
+      "kcal": 409.0,
+      "protein": 22.0,
+      "fat": 16.7,
+      "satFat": 4.7,
+      "transFat": 0.2,
+      "carbs": 42.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "d92c66e1-2810-5d74-8ae2-80b3a0fc48b2",
+    "name": "百味俱樂部Subway ClubTM",
+    "servingGrams": 226.0,
+    "nutrients": {
+      "kcal": 325.0,
+      "protein": 21.0,
+      "fat": 7.1,
+      "satFat": 3.0,
+      "transFat": 0.2,
+      "carbs": 41.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "93e1fdb6-ad6a-5408-a3a2-8b1ba86ae423",
+    "name": "哈燒起司總匯Subway MeltTM",
+    "servingGrams": 211.0,
+    "nutrients": {
+      "kcal": 321.0,
+      "protein": 18.0,
+      "fat": 8.6,
+      "satFat": 3.7,
+      "transFat": 0.2,
+      "carbs": 42.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "5760ee53-f4ff-5cad-bca8-7001493e73c4",
+    "name": "鮪魚Tuna",
+    "servingGrams": 239.0,
+    "nutrients": {
+      "kcal": 507.0,
+      "protein": 22.0,
+      "fat": 29.1,
+      "satFat": 5.9,
+      "transFat": 0.9,
+      "carbs": 39.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "769f3441-80a5-552d-9296-0a36d87b05fc",
+    "name": "蛋沙拉Egg Mayo",
+    "servingGrams": 225.0,
+    "nutrients": {
+      "kcal": 421.0,
+      "protein": 17.0,
+      "fat": 20.7,
+      "satFat": 5.8,
+      "transFat": 0.3,
+      "carbs": 41.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "b167789a-befb-514c-964d-c6b5dcb184c7",
+    "name": "素食蔬菜Veggie DelightTM",
+    "servingGrams": 165.0,
+    "nutrients": {
+      "kcal": 250.0,
+      "protein": 10.0,
+      "fat": 5.7,
+      "satFat": 2.5,
+      "transFat": 0.2,
+      "carbs": 39.0,
+      "sugar": 5.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "862dc144-b593-5b31-bb5a-a635fba6b9bd",
+    "name": "厚切嫩牛Diced Beef",
+    "servingGrams": 236.0,
+    "nutrients": {
+      "kcal": 366.0,
+      "protein": 26.0,
+      "fat": 10.6,
+      "satFat": 4.8,
+      "transFat": 0.3,
+      "carbs": 40.0,
+      "sugar": 6.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "ee4fc5e0-c012-5495-b67e-e1308485b967",
+    "name": "鷹嘴豆泥餅Falafel",
+    "servingGrams": 240.0,
+    "nutrients": {
+      "kcal": 425.0,
+      "protein": 16.0,
+      "fat": 13.2,
+      "satFat": 5.4,
+      "transFat": 0.2,
+      "carbs": 58.0,
+      "sugar": 9.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "36d97f9a-f0b2-52a6-8de2-2cdf84f0b16a",
+    "name": "濃郁系披薩堡Pizza melt",
+    "servingGrams": 175.0,
+    "nutrients": {
+      "kcal": 453.0,
+      "protein": 22.0,
+      "fat": 23.8,
+      "satFat": 10.4,
+      "transFat": 0.2,
+      "carbs": 35.0,
+      "sugar": 4.6,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "3f02d96a-2d69-5413-b129-aef35f749248",
+    "name": "泰式檸檬雞Thai Lemon Flavour Ckicken",
+    "servingGrams": 269.0,
+    "nutrients": {
+      "kcal": 546.0,
+      "protein": 28.0,
+      "fat": 29.6,
+      "satFat": 7.2,
+      "transFat": 0.6,
+      "carbs": 42.0,
+      "sugar": 6.4,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "c08dcb7c-baf6-5feb-a12c-cd84c6e60188",
+    "name": "辣豆瓣嫩牛",
+    "servingGrams": 270.0,
+    "nutrients": {
+      "kcal": 460.0,
+      "protein": 29.0,
+      "fat": 15.2,
+      "satFat": 6.6,
+      "transFat": 0.3,
+      "carbs": 49.0,
+      "sugar": 11.2,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway 六吋",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "e47fca7a-19bc-5507-8119-6eb71a6c2b66",
+    "name": "墨西哥西南醬Chipotle Southwest",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 66.0,
+      "protein": 0.0,
+      "fat": 6.7,
+      "satFat": 1.2,
+      "transFat": 0.1,
+      "carbs": 1.0,
+      "sugar": 1.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "e228ea29-4249-5ad1-a17d-a3ac975326e0",
+    "name": "黃芥末Yellow Mustard",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 9.0,
+      "protein": 1.0,
+      "fat": 0.6,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 1.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "e3dbb815-cebe-5c2d-a6b8-8db903547e2b",
+    "name": "獨家秘方義大利番茄醬Marinara",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 10.0,
+      "protein": 0.0,
+      "fat": 0.2,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 2.0,
+      "sugar": 1.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "449b846f-d580-555a-9820-6372409c22fd",
+    "name": "甜蔥醬Sweet Onion",
+    "servingGrams": 18.0,
+    "nutrients": {
+      "kcal": 33.0,
+      "protein": 0.0,
+      "fat": 0.1,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 8.0,
+      "sugar": 7.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "aac6e81a-f030-552d-ac5f-86b3791f5cef",
+    "name": "蜂蜜芥末醬Honey Mustard",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 21.0,
+      "protein": 0.0,
+      "fat": 0.1,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 5.0,
+      "sugar": 4.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "9655d8a6-565a-5c8f-8f99-2cc9d288d8c0",
+    "name": "美乃滋Mayonnaise",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 100.0,
+      "protein": 0.0,
+      "fat": 11.0,
+      "satFat": 1.5,
+      "transFat": 0.3,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "c067f0d2-278a-538a-ae53-456f7ca95e25",
+    "name": "橄欖油Olive Oil",
+    "servingGrams": 5.0,
+    "nutrients": {
+      "kcal": 44.0,
+      "protein": 0.0,
+      "fat": 4.9,
+      "satFat": 0.3,
+      "transFat": 0.1,
+      "carbs": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "6048c9e9-d3e2-56ae-a32f-47c3cf641e48",
+    "name": "紅酒醋Red Wine Vinegar",
+    "servingGrams": 4.0,
+    "nutrients": {
+      "kcal": 0.3,
+      "protein": 0.0,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 0.1,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "3be27877-8eff-53ae-9f23-a55171aca600",
+    "name": "義大利油醋醬Italian Dressing",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 62.0,
+      "protein": 0.0,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 4.0,
+      "sugar": 3.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "9f4a1968-2009-5284-88bc-deb91fe05d69",
+    "name": "千島醬Thousand Island",
+    "servingGrams": 14.0,
+    "nutrients": {
+      "kcal": 62.0,
+      "protein": 0.0,
+      "fat": 0.0,
+      "satFat": 0.0,
+      "transFat": 0.0,
+      "carbs": 4.0,
+      "sugar": 3.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "8201a27e-360e-5b46-ae03-a83f5210270e",
+    "name": "鄉村醬Ranch",
+    "servingGrams": 21.3,
+    "nutrients": {
+      "kcal": 74.0,
+      "protein": 0.1,
+      "fat": 6.5,
+      "satFat": 0.9,
+      "transFat": 0.0,
+      "carbs": 3.7,
+      "sugar": 2.4,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "084810f5-c2e0-559b-9bf6-860c1d522da3",
+    "name": "白麵包White",
+    "servingGrams": 67.0,
+    "nutrients": {
+      "kcal": 195.0,
+      "protein": 7.0,
+      "fat": 2.5,
+      "satFat": 0.3,
+      "transFat": 0.1,
+      "carbs": 35.0,
+      "sugar": 3.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "c61ffe13-0dd9-5601-a36d-7194c3aca3fc",
+    "name": "小麥麵包Wheat",
+    "servingGrams": 69.0,
+    "nutrients": {
+      "kcal": 195.0,
+      "protein": 8.0,
+      "fat": 2.1,
+      "satFat": 0.3,
+      "transFat": 0.1,
+      "carbs": 35.0,
+      "sugar": 3.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "64652c65-4f53-53ee-a5c0-32f4a6a41e68",
+    "name": "蜂蜜燕麥麵包Honey Oat",
+    "servingGrams": 73.0,
+    "nutrients": {
+      "kcal": 210.0,
+      "protein": 8.0,
+      "fat": 2.3,
+      "satFat": 0.4,
+      "transFat": 0.1,
+      "carbs": 38.0,
+      "sugar": 4.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "b13f1954-7b8f-56b0-b39e-7b3ffa723d31",
+    "name": "巴馬乾酪麵包Parmesan Oregano",
+    "servingGrams": 70.0,
+    "nutrients": {
+      "kcal": 206.0,
+      "protein": 8.0,
+      "fat": 2.7,
+      "satFat": 0.4,
+      "transFat": 0.1,
+      "carbs": 37.0,
+      "sugar": 3.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "2f9aa056-5823-582d-9cf6-366889b791fa",
+    "name": "火焰烤餅Flatbread",
+    "servingGrams": 86.5,
+    "nutrients": {
+      "kcal": 258.0,
+      "protein": 9.3,
+      "fat": 4.8,
+      "satFat": 1.0,
+      "transFat": 0.1,
+      "carbs": 44.0,
+      "sugar": 0.1,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "41b7ef20-f04e-5bb2-af04-56def44ebfd2",
+    "name": "菠菜捲餅Spinach Wrap",
+    "servingGrams": 65.0,
+    "nutrients": {
+      "kcal": 196.0,
+      "protein": 5.0,
+      "fat": 5.4,
+      "satFat": 2.8,
+      "transFat": 0.0,
+      "carbs": 32.0,
+      "sugar": 2.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0
+    },
+    "note": "Subway",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "28e8a559-f719-5cc1-8d38-b133dc6d7830",
+    "name": "勁辣鷄腿堡",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 536.52,
+      "protein": 23.0,
+      "fat": 28.0,
+      "satFat": 5.8,
+      "transFat": 0.0,
+      "carbs": 49.0,
+      "sugar": 6.4,
+      "sodium": 977.1,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "45d47ace-a238-58bb-b6f3-8d9a5d88c006",
+    "name": "麥香鷄",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 393.02,
+      "protein": 14.0,
+      "fat": 17.0,
+      "satFat": 3.7,
+      "transFat": 0.0,
+      "carbs": 45.0,
+      "sugar": 6.6,
+      "sodium": 796.8,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "19950e38-061d-5a46-bba6-05eb647e3dd4",
+    "name": "雙層牛肉吉事堡",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 475.0,
+      "protein": 26.0,
+      "fat": 26.0,
+      "satFat": 14.0,
+      "transFat": 0.9,
+      "carbs": 35.0,
+      "sugar": 7.2,
+      "sodium": 855.3,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "f7c2c1d7-b34c-5f25-969e-186c200ac99a",
+    "name": "大麥克",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 602.0,
+      "protein": 28.0,
+      "fat": 32.0,
+      "satFat": 13.0,
+      "transFat": 0.7,
+      "carbs": 51.0,
+      "sugar": 8.2,
+      "sodium": 902.3,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "463f602d-495e-55a1-91a6-5afa5bf33652",
+    "name": "麥香魚",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 337.89,
+      "protein": 15.0,
+      "fat": 16.0,
+      "satFat": 3.1,
+      "transFat": 0.2,
+      "carbs": 36.0,
+      "sugar": 4.6,
+      "sodium": 602.4,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "8b1f1287-4a6e-5b11-a3ee-a5158bc4da73",
+    "name": "蘋果派",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 216.84,
+      "protein": 2.0,
+      "fat": 9.2,
+      "satFat": 3.0,
+      "transFat": 0.1,
+      "carbs": 32.0,
+      "sugar": 9.4,
+      "sodium": 123.2,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "93fa3b8a-a579-5ff8-916d-6b2739ffd0b9",
+    "name": "麥克鷄塊®(4塊)",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 178.0,
+      "protein": 11.0,
+      "fat": 11.0,
+      "satFat": 2.8,
+      "transFat": 0.0,
+      "carbs": 8.8,
+      "sugar": 0.0,
+      "sodium": 286.5,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "7dd6b116-89bc-5c89-9479-2d67484945d3",
+    "name": "薯餅",
+    "servingGrams": null,
+    "nutrients": {
+      "kcal": 168.49,
+      "protein": 1.5,
+      "fat": 11.0,
+      "satFat": 1.6,
+      "transFat": 0.0,
+      "carbs": 15.0,
+      "sugar": 0.0,
+      "sodium": 264.3,
+      "cholesterol": 0.0
+    },
+    "note": "麥當勞",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "55175884-247b-5323-b071-7801d049d67d",
+    "name": "7-11綠咖哩",
+    "servingGrams": 400.0,
+    "nutrients": {
+      "kcal": 708.0,
+      "protein": 20.8,
+      "fat": 22.4,
+      "satFat": 12.0,
+      "transFat": 0.0,
+      "carbs": 106.0,
+      "sugar": 3.2,
+      "sodium": 1112.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "1f0cba4b-d5dd-583d-9ed2-d6aef97ef489",
+    "name": "紅燒牛肉湯",
+    "servingGrams": 450.0,
+    "nutrients": {
+      "kcal": 464.0,
+      "protein": 4.7,
+      "fat": 63.9,
+      "satFat": 19.6,
+      "transFat": 0.0,
+      "carbs": 12.4,
+      "sugar": 5.6,
+      "sodium": 1451.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "86078c92-4442-5ddc-adb2-c0c63cb182a2",
+    "name": "牛五花肉片",
+    "servingGrams": 180.0,
+    "nutrients": {
+      "kcal": 576.0,
+      "protein": 27.72,
+      "fat": 31.32,
+      "satFat": 14.4,
+      "transFat": 0.0,
+      "carbs": 45.72,
+      "sugar": 5.94,
+      "sodium": 1504.8,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  },
+  {
+    "id": "637a0ec1-a1c5-5422-b824-e7696bb092d7",
+    "name": "泰式打拋豬(肌肉海灘)",
+    "servingGrams": 445.0,
+    "nutrients": {
+      "kcal": 541.6,
+      "protein": 27.1,
+      "fat": 13.4,
+      "satFat": 4.5,
+      "transFat": 0.0,
+      "carbs": 74.8,
+      "sugar": 2.2,
+      "sodium": 214.0,
+      "cholesterol": 0.0
+    },
+    "note": "",
+    "favorite": false,
+    "createdAt": 1755576000000
+  }
+]

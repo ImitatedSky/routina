@@ -1,0 +1,15 @@
+schema: spec-driven
+
+context: |
+  Routina 家族的 monorepo：`:hub`（家族目錄與管理，com.routina.hub）、`:core:contract`（家族契約 library）、
+  以及各自產出獨立 APK 的子 App module（`:apps:<id>`，applicationId `com.routina.<id>`）。
+  子 App 是獨立 APK 而不是 Hub 內的模組——理由是權限隔離，每個成員只要求自己需要的權限。
+  Tech stack: Kotlin 2.4 + AGP 9.3（Kotlin 支援內建，不套 kotlin.android 外掛）、Jetpack Compose Material 3、
+  kotlinx.serialization JSON 本地檔案儲存（無資料庫、無後端、無帳號）、版本目錄 gradle/libs.versions.toml。
+  compileSdk 37 / targetSdk 35 / minSdk 26，R8 minify，家族共用一把 release keystore（CI 的 KEYSTORE_* secret）。
+  發佈: GitHub Releases 附 APK。Hub 用裸 `v*` tag；子 App 用前綴 tag（例 `bite-v0.1.0`），APK 命名 `routina-<id>-vX.Y.Z.apk`。
+  家族契約只用 manifest meta-data + Intent extras（字串約定），權威定義在 core/contract/Family.kt。
+  UI 語言: 繁體中文。設計原則: 簡單圓角色塊 + 文字說明，不做擬物造型；顏色只做分組輔助、辨識靠文字；
+  刪除走溢位選單不用滑動刪除。程式碼直白、像一般工程師寫的，註解精簡只講程式碼看不出的原因。
+  原則: 最簡實作、先能動再加功能、避免投機性抽象；長期決策不接受過渡方案。
+  Commit message 一律英文、不含 Co-Authored-By。只 push main，tag 由使用者決定何時打。
