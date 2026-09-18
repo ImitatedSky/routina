@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 啟動圖示的底色，與 Routina Flow 同值（家族視覺一致） -->
+    <color name="ic_launcher_background">#FDF8F4</color>
+</resources>
