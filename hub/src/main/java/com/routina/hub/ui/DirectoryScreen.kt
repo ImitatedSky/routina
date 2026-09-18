@@ -132,24 +132,78 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                 state.registryError?.let { message ->
                     item(key = "registry-error") { OfflineNotice(message) }
                 }
-                items(state.entries, key = { it.id }) { entry ->
-                    EntryCard(
-                        entry = entry,
-                        job = state.jobs[entry.id],
-                        onOpen = {
-                            if (!FamilyScanner.launch(context, entry.packageName)) {
-                                scope.launch { snackbarHostState.showSnackbar(launchFailed) }
-                            }
-                        },
-                        onInstall = { viewModel.install(entry) },
-                        onRetry = { viewModel.retryInstall(entry) },
-                        onDismissJob = { viewModel.clearJob(entry.id) },
-                        onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
-                        onGrantInstall = { ApkInstaller.openInstallPermission(context) }
-                    )
+
+                // 分成兩區而不是混在一份清單裡：「還有什麼可以裝」是使用者最常來這裡問的問題，
+                // 要一眼看得出來，不該靠卡片上有沒有按鈕去分辨。
+                val available = state.entries
+                    .filter { it.status == CatalogEntry.Status.NOT_INSTALLED }
+                val installed = state.entries.filterNot {
+                    it.status == CatalogEntry.Status.NOT_INSTALLED
+                }
+
+                item(key = "header-available") {
+                    SectionHeader(stringResource(R.string.section_available), available.size)
+                }
+                if (available.isEmpty()) {
+                    item(key = "available-empty") {
+                        Text(
+                            text = stringResource(R.string.section_all_installed),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                fun cards(entries: List<CatalogEntry>) {
+                    items(entries, key = { it.id }) { entry ->
+                        EntryCard(
+                            entry = entry,
+                            job = state.jobs[entry.id],
+                            onOpen = {
+                                if (!FamilyScanner.launch(context, entry.packageName)) {
+                                    scope.launch { snackbarHostState.showSnackbar(launchFailed) }
+                                }
+                            },
+                            onInstall = { viewModel.install(entry) },
+                            onRetry = { viewModel.retryInstall(entry) },
+                            onDismissJob = { viewModel.clearJob(entry.id) },
+                            onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
+                            onGrantInstall = { ApkInstaller.openInstallPermission(context) }
+                        )
+                    }
+                }
+
+                cards(available)
+
+                if (installed.isNotEmpty()) {
+                    item(key = "header-installed") {
+                        SectionHeader(stringResource(R.string.section_installed), installed.size)
+                    }
+                    cards(installed)
                 }
             }
         }
+    }
+}
+
+/** 分區標題。帶數量，因為「還有幾個可以裝」本身就是使用者要的資訊 */
+@Composable
+private fun SectionHeader(title: String, count: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 6.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.size(8.dp))
+        Text(
+            text = count.toString(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

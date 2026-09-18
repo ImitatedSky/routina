@@ -27,6 +27,10 @@
     <string name="version_unknown">查不到可安裝的版本</string>
     <string name="version_latest">已是最新</string>
 
+    <string name="section_available">可安裝</string>
+    <string name="section_installed">已安裝</string>
+    <string name="section_all_installed">名冊上的成員都已經裝好了</string>
+
     <string name="job_downloading">下載中 %1$s / %2$s</string>
     <string name="job_verifying">正在驗證簽章…</string>
     <string name="job_handed_off">已交給系統安裝畫面，完成後回到這裡會自動更新狀態</string>
