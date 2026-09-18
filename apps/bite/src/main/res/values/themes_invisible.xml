@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      能力跳板用的隱形主題：全透明、無標題列、不變暗背景、不做進出場動畫。
+      被呼叫時這個 Activity 只是收件人，做完事立刻 finish，
+      使用者不該看到任何畫面閃一下。
+    -->
+    <style name="Theme.Bite.Invisible" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>
