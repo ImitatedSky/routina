@@ -50,6 +50,7 @@ data class Nutrients(
 /**
  * 食物庫的一筆。[nutrients] 是「每一份」的量；
  * [servingGrams] 為 null 表示這個食物沒有標示每份幾公克，只能用份數記錄。
+ * [category] 是來源分類（Subway、麥當勞…），空字串＝未分類；分類沒有獨立的實體，就是這個字串。
  */
 @Serializable
 data class Food(
@@ -58,6 +59,7 @@ data class Food(
     val servingGrams: Double? = null,
     val nutrients: Nutrients,
     val note: String = "",
+    val category: String = "",
     val favorite: Boolean = false,
     val createdAt: Long
 )

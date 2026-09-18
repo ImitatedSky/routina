@@ -73,6 +73,24 @@ fun searchFoods(foods: List<Food>, query: String): List<Food> {
     return matched.sortedWith(compareByDescending<Food> { it.favorite }.thenBy { it.name })
 }
 
+/** 一個分類與它底下的食物。[category] 是空字串就是未分類 */
+data class FoodGroup(val category: String, val foods: List<Food>)
+
+/** 食物庫裡用過的分類，去重去空、依名稱排序。編輯食物時拿來當建議 */
+fun allCategories(foods: List<Food>): List<String> =
+    foods.map { it.category }.filter { it.isNotBlank() }.distinct().sorted()
+
+/**
+ * 依分類分組。未分類永遠排最後，其餘依分類名稱；組內沿用搜尋的排序（常用優先再依名稱）。
+ */
+fun groupByCategory(foods: List<Food>): List<FoodGroup> {
+    val groups = foods.groupBy { it.category }
+        .map { (category, list) -> FoodGroup(category, searchFoods(list, "")) }
+    return groups.sortedWith(
+        compareBy<FoodGroup> { it.category.isEmpty() }.thenBy { it.category }
+    )
+}
+
 /** 新紀錄的預設餐別，依當下時間帶入（D4） */
 fun defaultMeal(time: LocalTime = nowTime()): Meal {
     val minutes = time.hour * 60 + time.minute

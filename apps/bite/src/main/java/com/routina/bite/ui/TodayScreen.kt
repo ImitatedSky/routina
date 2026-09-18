@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MonitorWeight
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -62,6 +63,7 @@ import kotlinx.coroutines.launch
 fun TodayScreen(
     viewModel: BiteViewModel,
     onAdd: (String, Meal) -> Unit,
+    onOpenLibrary: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenWeights: () -> Unit,
     onOpenSettings: () -> Unit
@@ -89,6 +91,9 @@ fun TodayScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
+                    IconButton(onClick = onOpenLibrary) {
+                        Icon(Icons.Default.Restaurant, stringResource(R.string.nav_library))
+                    }
                     IconButton(onClick = onOpenHistory) {
                         Icon(Icons.Default.History, stringResource(R.string.nav_history))
                     }

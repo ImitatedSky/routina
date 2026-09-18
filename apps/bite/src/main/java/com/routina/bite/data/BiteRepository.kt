@@ -62,6 +62,9 @@ class BiteRepository(context: Context) {
     private val _targets = MutableStateFlow(Targets())
     val targets: StateFlow<Targets> = _targets.asStateFlow()
 
+    private val _expandedCategories = MutableStateFlow<Set<String>>(emptySet())
+    val expandedCategories: StateFlow<Set<String>> = _expandedCategories.asStateFlow()
+
     init {
         // 檔案只有幾百 KB，啟動時同步載入，讓第一幀就有正確資料
         val seeded = loadFoods()
@@ -70,6 +73,7 @@ class BiteRepository(context: Context) {
         _dayNotes.value = diary.dayNotes
         _weights.value = readList(weightsFile, ListSerializer(WeightEntry.serializer()))
         _targets.value = readTargets()
+        _expandedCategories.value = readExpandedCategories()
         // 內建食物庫讀失敗時（理論上不會）不落地空檔，下次啟動還有機會補上
         if (seeded && _foods.value.isNotEmpty()) persistFoods()
     }
@@ -138,6 +142,46 @@ class BiteRepository(context: Context) {
     fun deleteFood(id: String) {
         _foods.value = _foods.value.filterNot { it.id == id }
         persistFoods()
+    }
+
+    /**
+     * 把整個分類底下的食物改到新名稱，[to] 空白就是變成未分類。
+     * 一次改完整批再寫一次檔（逐筆 upsert 會排一堆寫入）。
+     */
+    fun renameCategory(from: String, to: String) {
+        val target = to.trim()
+        if (from.isBlank() || from == target) return
+        _foods.value = _foods.value.map { food ->
+            if (food.category == from) food.copy(category = target) else food
+        }
+        persistFoods()
+        // 展開狀態跟著搬，不然改完名那組會突然收起來，看起來像食物不見了
+        if (from in _expandedCategories.value) {
+            setExpandedCategories(_expandedCategories.value - from + target)
+        }
+    }
+
+    // ---------- 分類展開狀態 ----------
+
+    // 對外用的是分類名稱本身（未分類就是空字串）；存檔時未分類換成 NONE_CATEGORY_KEY，
+    // 因為整個集合是用換行串成一個字串，空字串串進去就分不出來了。
+    private fun readExpandedCategories(): Set<String> =
+        prefs.getString(KEY_EXPANDED_CATEGORIES, null)
+            ?.split('\n')
+            ?.filter { it.isNotEmpty() }
+            ?.map { if (it == NONE_CATEGORY_KEY) "" else it }
+            ?.toSet()
+            ?: emptySet()
+
+    fun setCategoryExpanded(category: String, expanded: Boolean) {
+        val current = _expandedCategories.value
+        setExpandedCategories(if (expanded) current + category else current - category)
+    }
+
+    private fun setExpandedCategories(value: Set<String>) {
+        _expandedCategories.value = value
+        val stored = value.joinToString("\n") { it.ifEmpty { NONE_CATEGORY_KEY } }
+        prefs.edit().putString(KEY_EXPANDED_CATEGORIES, stored).apply()
     }
 
     // ---------- 紀錄 ----------
@@ -295,5 +339,7 @@ class BiteRepository(context: Context) {
         const val KEY_TARGET_PROTEIN = "target_protein"
         const val KEY_TARGET_FAT = "target_fat"
         const val KEY_TARGET_CARBS = "target_carbs"
+        const val KEY_EXPANDED_CATEGORIES = "expanded_categories"
+        const val NONE_CATEGORY_KEY = "__none__"
     }
 }

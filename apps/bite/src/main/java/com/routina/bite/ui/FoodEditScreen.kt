@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.routina.bite.R
+import com.routina.bite.data.allCategories
 import com.routina.bite.model.Food
 import com.routina.bite.model.Nutrients
 
@@ -55,7 +60,11 @@ fun FoodEditScreen(
     var sodium by remember { mutableStateOf(existing.gramsOf { it.sodium }) }
     var cholesterol by remember { mutableStateOf(existing.gramsOf { it.cholesterol }) }
     var note by remember { mutableStateOf(existing?.note.orEmpty()) }
+    var category by remember { mutableStateOf(existing?.category.orEmpty()) }
     var favorite by remember { mutableStateOf(existing?.favorite ?: false) }
+
+    val foods by viewModel.foods.collectAsStateWithLifecycle()
+    val categories = allCategories(foods)
 
     var showErrors by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf(false) }
@@ -84,6 +93,7 @@ fun FoodEditScreen(
                     cholesterol = cholesterol.toDoubleOrNull() ?: 0.0
                 ),
                 note = note.trim(),
+                category = category.trim(),
                 favorite = favorite,
                 createdAt = existing?.createdAt ?: System.currentTimeMillis()
             )
@@ -174,6 +184,25 @@ fun FoodEditScreen(
                 label = { Text(stringResource(R.string.field_note)) },
                 modifier = Modifier.fillMaxWidth()
             )
+            OutlinedTextField(
+                value = category,
+                onValueChange = { category = it },
+                label = { Text(stringResource(R.string.field_category)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            // 既有分類直接點，省得自己打字打錯一個字就多出一組
+            if (categories.isNotEmpty()) {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(categories, key = { it }) { name ->
+                        FilterChip(
+                            selected = name == category,
+                            onClick = { category = if (name == category) "" else name },
+                            label = { Text(name) }
+                        )
+                    }
+                }
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.field_favorite),

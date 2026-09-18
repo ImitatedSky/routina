@@ -23,6 +23,7 @@ import com.routina.bite.model.Meal
 import com.routina.bite.ui.AddFoodScreen
 import com.routina.bite.ui.BiteViewModel
 import com.routina.bite.ui.FoodEditScreen
+import com.routina.bite.ui.FoodLibraryScreen
 import com.routina.bite.ui.HistoryScreen
 import com.routina.bite.ui.SettingsScreen
 import com.routina.bite.ui.TodayScreen
@@ -65,6 +66,7 @@ class MainActivity : ComponentActivity() {
 
 private object Routes {
     const val TODAY = "today"
+    const val LIBRARY = "library"
     const val HISTORY = "history"
     const val WEIGHTS = "weights"
     const val SETTINGS = "settings"
@@ -101,6 +103,7 @@ private fun BiteNavHost(openTodayRequests: Int) {
             TodayScreen(
                 viewModel = viewModel,
                 onAdd = { date, meal -> navController.navigate(Routes.add(date, meal)) },
+                onOpenLibrary = { navController.navigate(Routes.LIBRARY) },
                 onOpenHistory = { navController.navigate(Routes.HISTORY) },
                 onOpenWeights = { navController.navigate(Routes.WEIGHTS) },
                 onOpenSettings = { navController.navigate(Routes.SETTINGS) }
@@ -124,7 +127,17 @@ private fun BiteNavHost(openTodayRequests: Int) {
                 initialMeal = meal,
                 onDone = { navController.popBackStack() },
                 onEditFood = { foodId -> navController.navigate(Routes.food(foodId)) },
-                onNewFood = { navController.navigate(Routes.FOOD_NEW) }
+                onNewFood = { navController.navigate(Routes.FOOD_NEW) },
+                onOpenLibrary = { navController.navigate(Routes.LIBRARY) }
+            )
+        }
+
+        composable(Routes.LIBRARY) {
+            FoodLibraryScreen(
+                viewModel = viewModel,
+                onEditFood = { foodId -> navController.navigate(Routes.food(foodId)) },
+                onNewFood = { navController.navigate(Routes.FOOD_NEW) },
+                onBack = { navController.popBackStack() }
             )
         }
 

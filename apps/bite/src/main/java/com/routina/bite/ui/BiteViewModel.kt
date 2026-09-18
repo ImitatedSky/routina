@@ -40,6 +40,9 @@ class BiteViewModel(application: Application) : AndroidViewModel(application) {
     val weights: StateFlow<List<WeightEntry>> = repository.weights
     val targets: StateFlow<Targets> = repository.targets
 
+    /** 目前被展開的分類（未分類是空字串）。食物庫頁與新增紀錄頁共用同一份 */
+    val expandedCategories: StateFlow<Set<String>> = repository.expandedCategories
+
     // 目前看的是哪一天。歷史頁選日期後也是改這個值，所以 today 這條路由不需要參數
     private val _selectedDate = MutableStateFlow(todayDate())
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
@@ -63,6 +66,13 @@ class BiteViewModel(application: Application) : AndroidViewModel(application) {
     fun saveFood(food: Food) = repository.upsertFood(food)
 
     fun deleteFood(id: String) = repository.deleteFood(id)
+
+    fun toggleFavorite(food: Food) = repository.upsertFood(food.copy(favorite = !food.favorite))
+
+    fun renameCategory(from: String, to: String) = repository.renameCategory(from, to)
+
+    fun setCategoryExpanded(category: String, expanded: Boolean) =
+        repository.setCategoryExpanded(category, expanded)
 
     fun newFoodId(): String = UUID.randomUUID().toString()
 

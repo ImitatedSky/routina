@@ -10,6 +10,7 @@
     <string name="action_edit">編輯</string>
     <string name="action_delete">刪除</string>
     <string name="action_cancel">取消</string>
+    <string name="action_toggle_favorite">切換常用</string>
     <string name="action_ok">好</string>
 
     <!-- 單位與營養素 -->
@@ -55,6 +56,7 @@
     <string name="entry_delete_message">只會刪掉這一天的這筆，食物庫不受影響。</string>
 
     <!-- 導覽 -->
+    <string name="nav_library">食物庫</string>
     <string name="nav_history">歷史</string>
     <string name="nav_weights">體重</string>
     <string name="nav_settings">設定</string>
@@ -75,6 +77,16 @@
     <string name="add_per_serving">每份 %1$s g</string>
     <string name="add_amount_hint">份數與公克擇一填，改一邊另一邊會跟著算</string>
 
+    <!-- 食物庫 -->
+    <string name="library_title">食物庫</string>
+    <string name="library_empty">食物庫是空的，按右下角的＋新增一個食物</string>
+    <string name="category_none">未分類</string>
+    <string name="category_group_header">%1$s（%2$d）</string>
+    <string name="category_expand">展開</string>
+    <string name="category_collapse">收合</string>
+    <string name="category_rename_title">重新命名分類</string>
+    <string name="category_rename_hint">這個分類底下的食物會一起改。留白就變成未分類。</string>
+
     <!-- 食物欄位 -->
     <string name="food_new_title">新增食物</string>
     <string name="food_edit_title">編輯食物</string>
@@ -90,6 +102,7 @@
     <string name="field_sodium">鈉（mg）</string>
     <string name="field_cholesterol">膽固醇（mg）</string>
     <string name="field_note">備註</string>
+    <string name="field_category">分類（可留空）</string>
     <string name="field_favorite">常用</string>
     <string name="error_name_required">名稱必填</string>
     <string name="error_kcal_required">熱量必填</string>
