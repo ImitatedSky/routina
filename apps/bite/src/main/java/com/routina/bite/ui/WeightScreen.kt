@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -47,6 +48,7 @@ import com.routina.bite.model.WeightSource
 @Composable
 fun WeightScreen(
     viewModel: BiteViewModel,
+    onOpenCharts: () -> Unit,
     onBack: () -> Unit
 ) {
     val weights by viewModel.weights.collectAsStateWithLifecycle()
@@ -64,6 +66,11 @@ fun WeightScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.action_back))
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onOpenCharts) {
+                        Icon(Icons.AutoMirrored.Filled.ShowChart, stringResource(R.string.nav_charts))
                     }
                 }
             )

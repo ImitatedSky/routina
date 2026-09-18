@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import com.routina.bite.data.totalOf
 fun HistoryScreen(
     viewModel: BiteViewModel,
     onOpenDate: (String) -> Unit,
+    onOpenCharts: () -> Unit,
     onBack: () -> Unit
 ) {
     val entries by viewModel.entries.collectAsStateWithLifecycle()
@@ -51,6 +53,11 @@ fun HistoryScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.action_back))
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onOpenCharts) {
+                        Icon(Icons.AutoMirrored.Filled.ShowChart, stringResource(R.string.nav_charts))
                     }
                 }
             )

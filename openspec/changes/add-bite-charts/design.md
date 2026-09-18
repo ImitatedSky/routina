@@ -98,8 +98,10 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
   他自己按的，不需要 App 幫他改。
 - 判斷依據是「飲食或體重任一有資料」而不是分頁各自判斷，否則切分頁會看到區間自己跳掉。
 
-`ALL` 的範圍＝所有紀錄的最早日期到最晚日期（不是到今天）。使用者的資料在一年前，
-畫到今天會多出十個月的空白。
+`ALL` 的範圍＝**該張圖自己的資料**的最早到最晚日期（不是到今天）。使用者的資料在一年前，
+畫到今天會多出十個月的空白；而飲食紀錄止於 2025-10-13、體重量到 2026-09，
+用「兩者聯集」當範圍會讓熱量圖右邊拖出十一個月的空白。區間的**選擇**是共用的，
+每張圖再各自算自己的起訖。
 
 ### D4. 三種顏色角色，飽和色只給細線
 
@@ -112,13 +114,15 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
 | 7 日移動平均 | `primary` | 2dp 實線 | 細線 |
 | 目標線 | `outline` | 1dp 虛線＋數值標籤 | 細線 |
 | 格線／軸 | `outlineVariant` | 1dp | 細線 |
+| 折線圖的選取指示 | `onSurfaceVariant` | 1dp 垂直參考線 | 細線 |
 
 選取態**不用顏色，用同色系的深淺**（`surfaceVariant` → `onSurfaceVariant`），
 這是研究裡「層級用深淺做」那一條，也避免「同一個顏色同時意味目標與選取」。
 選取的長條不加邊框、不加陰影——**單一深度機制**。
+折線圖沒有長條可以加深，所以改畫一條中性色的垂直參考線；兩種都是中性色，都不是「又一個類別」。
 
 三大營養素沿用既有的 `MacroColors`（蛋白質 #4E8A7B／脂肪 #C2895A／碳水 #8A7BB5），
-只畫在折線與 8dp 圖例色塊上。體脂折線用 `MacroColors.Fat`——體脂對應脂肪，
+只畫在折線與 12dp 圖例色塊上。體脂折線用 `MacroColors.Fat`——體脂對應脂肪，
 是既有語意的延伸，不是新色系。
 
 全畫面類別色合計 4 種（primary＋三個 macro），在 8 種上限內。
@@ -127,8 +131,10 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
 
 - 圖表內的軸標籤、圖例：`labelSmall`／`onSurfaceVariant`，一律 weight 400
 - 摘要卡的標題（中文）：`bodyMedium`／`onSurfaceVariant`，**不加字重**
-- 摘要卡的數值（阿拉伯數字＋單位）：`titleMedium` + `FontWeight.SemiBold`——
-  Roboto 有真字重，這是 App 現在唯一一處 SemiBold 的用法，照著延續
+- 摘要卡的數值：`titleMedium` + `FontWeight.SemiBold`——Roboto 有真字重，
+  這是 App 現在唯一一處 SemiBold 的用法，照著延續。
+  **單位寫進中文標題裡**（「平均（大卡）」），數值那一格只留數字，
+  這樣 SemiBold 不會壓到任何中文字
 - 分頁標題、選取態文字列：中文，維持 `bodyLarge`／`bodyMedium`，靠顏色深淺分層
 - 中文區塊一律 `letterSpacing = 0.sp`
 
@@ -169,7 +175,8 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
 
 ### D9. y 軸刻度取「好數字」，x 軸日期依可用寬度抽稀
 
-- y 軸：目標 4 條刻度，間隔取 1／2／5 × 10ⁿ 裡第一個讓刻度數 ≤ 5 的值。
+- y 軸：以 4 段為目標算間隔，取 1／2／5 × 10ⁿ；向外對齊到整數刻度後若超過 5 段，
+  就換大一級的間隔重算，所以刻度最多 6 條。
   熱量與營養素的 y 軸從 0 起；**體重不從 0 起**，範圍取 `[min - padding, max + padding]`
   再對齊到刻度間隔，最低與最高刻度都標出來，讀者一眼看得到範圍。
 - x 軸：一個 `M/d` 標籤約需 40dp，`step = ceil(天數 / (寬度 / 40dp))`，只畫 `index % step == 0` 的。
@@ -180,7 +187,8 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
 `Modifier.pointerInput` + `detectTapGestures`：把 tap 的 x 換算回日曆 index，
 取那天（沒有紀錄就取最近的有紀錄的那天，容差 1 天）。選中的日子存在畫面的 `remember` 狀態裡，
 圖重畫時把那一根長條／那個點加深。下方固定高度一行文字顯示「10月13日：2193 大卡」，
-沒有選取時顯示提示（「點長條看單日數值」）——固定高度是為了選取時版面不跳動。
+沒有選取時顯示提示（「點圖上的資料看單日數值」）。這一列有最小高度，沒選取時版面不會塌下去；
+營養素分頁的文字較長，允許折行而不是截斷。
 
 換區間或換分頁時清掉選取（那個日期在新的區間裡可能不存在）。
 
@@ -208,8 +216,9 @@ compileSdk 37／minSdk 26）上把 `com.patrykandpatrick.vico:compose-m3:3.3.1` 
 
 - [自己畫的軸刻度與抽稀沒有函式庫的測試覆蓋，極端資料（單日、全部同值、極大值）可能出怪版面]
   → `niceStep` 對 `max == min` 與 `max == 0` 有明確分支；單點的折線畫成一個點不畫線。
-- [沒有實機驗證。文字量測（`TextMeasurer`）與 Canvas 在不同密度下的表現只在 `@Preview` 等級確認過]
-  → 所有尺寸用 dp 換 px，不寫死 px；字體走 MaterialTheme typography 不自訂 sp。
+- [**完全沒有實機或 Preview 算圖驗證**，只有 debug／release 編譯綠燈與把軸刻度、日期抽稀、
+  移動平均三段邏輯照抄成腳本跑過對照] → 所有尺寸用 dp 換 px、不寫死 px，字體走 MaterialTheme
+  typography 不自訂 sp；但版面是否真的好看、標籤會不會在低密度螢幕上擠在一起，要合併後在裝置上看。
 - [`ALL` 區間十年後有三千多個日曆天] → 長條寬度會小於 1px。這一波不處理；
   真的變成問題時的解法是週彙總（已列在 Non-goals），不是捲動。
 - [移動平均在紀錄稀疏的區段會誤導] → 以當天為右端的 7 個日曆天內，**有紀錄的日子至少 4 天**才畫點，

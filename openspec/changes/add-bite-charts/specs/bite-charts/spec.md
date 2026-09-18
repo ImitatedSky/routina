@@ -23,12 +23,16 @@ the Weight screen's icon SHALL land on the 體重 tab. The Today screen SHALL NO
 ### Requirement: Range selection
 The Charts screen SHALL offer four ranges — 7 天, 30 天, 90 天 and 全部 — as a single selector
 shared by all three tabs. 7/30/90 SHALL end at today and cover that many calendar days including today.
-全部 SHALL span the earliest to the latest logged date across diary and weight entries, not to today.
+全部 SHALL span the earliest to the latest date that the chart in view has data for, not to today.
 Switching tabs SHALL NOT change the selected range.
 
 #### Scenario: Range applies to every tab
 - **WHEN** the user selects 90 天 on the 熱量 tab and switches to the 營養素 tab
 - **THEN** the 營養素 tab shows the same 90 天 range and the selector still reads 90 天
+
+#### Scenario: 全部 follows the chart in view
+- **WHEN** the user selects 全部 and diary entries end on 2025-10-13 while weight readings run to 2026-09-02
+- **THEN** the 熱量 tab stops at 2025-10-13 and the 體重 tab runs to 2026-09-02
 
 ### Requirement: Empty default range falls back to 全部
 The Charts screen SHALL open on 30 天. When the screen opens and neither diary entries nor weight
@@ -113,7 +117,7 @@ that reached the protein target over the number of logged days.
 - **THEN** the summary reads 9 / 23
 
 ### Requirement: Axes stay legible
-Every chart SHALL label its y axis with at most five ticks at 1, 2 or 5 times a power of ten, and SHALL
+Every chart SHALL label its y axis with at most six ticks spaced at 1, 2 or 5 times a power of ten, and SHALL
 label its x axis with dates thinned to the available width so that labels never overlap.
 
 #### Scenario: Long range

@@ -22,6 +22,8 @@ import com.routina.bite.data.defaultMeal
 import com.routina.bite.model.Meal
 import com.routina.bite.ui.AddFoodScreen
 import com.routina.bite.ui.BiteViewModel
+import com.routina.bite.ui.ChartTab
+import com.routina.bite.ui.ChartsScreen
 import com.routina.bite.ui.FoodEditScreen
 import com.routina.bite.ui.FoodLibraryScreen
 import com.routina.bite.ui.HistoryScreen
@@ -72,6 +74,9 @@ private object Routes {
     const val SETTINGS = "settings"
     const val FOOD_NEW = "food/new"
 
+    // charts?tab=kcal|weight|macros，省略時落在熱量分頁
+    const val CHARTS = "charts?tab={tab}"
+
     // add/{date}/{meal}：meal 帶 Meal 的名稱，例如 add/2025-09-18/LUNCH
     const val ADD = "add/{date}/{meal}"
     const val FOOD_EDIT = "food/{foodId}"
@@ -79,9 +84,11 @@ private object Routes {
     const val ARG_DATE = "date"
     const val ARG_MEAL = "meal"
     const val ARG_FOOD_ID = "foodId"
+    const val ARG_TAB = "tab"
 
     fun add(date: String, meal: Meal) = "add/$date/${meal.name}"
     fun food(foodId: String) = "food/$foodId"
+    fun charts(tab: ChartTab) = "charts?tab=${tab.name.lowercase()}"
 }
 
 @Composable
@@ -167,6 +174,7 @@ private fun BiteNavHost(openTodayRequests: Int) {
                     viewModel.selectDate(date)
                     navController.popBackStack()
                 },
+                onOpenCharts = { navController.navigate(Routes.charts(ChartTab.KCAL)) },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -174,6 +182,26 @@ private fun BiteNavHost(openTodayRequests: Int) {
         composable(Routes.WEIGHTS) {
             WeightScreen(
                 viewModel = viewModel,
+                onOpenCharts = { navController.navigate(Routes.charts(ChartTab.WEIGHT)) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.CHARTS,
+            arguments = listOf(
+                navArgument(Routes.ARG_TAB) {
+                    type = NavType.StringType
+                    defaultValue = ChartTab.KCAL.name.lowercase()
+                }
+            )
+        ) { entry ->
+            val tab = entry.arguments?.getString(Routes.ARG_TAB)
+                ?.let { name -> ChartTab.entries.firstOrNull { it.name.lowercase() == name } }
+                ?: ChartTab.KCAL
+            ChartsScreen(
+                viewModel = viewModel,
+                initialTab = tab,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -159,4 +159,37 @@
     <string name="capability_missing">呼叫沒有指定要執行哪個能力</string>
     <string name="capability_unknown">Routina Bite 沒有這個能力：%1$s</string>
     <string name="capability_open_failed">開不起來今日紀錄</string>
+
+    <!-- 趨勢圖表 -->
+    <string name="charts_title">趨勢</string>
+    <string name="nav_charts">趨勢圖表</string>
+    <string name="charts_tab_kcal">熱量</string>
+    <string name="charts_tab_weight">體重</string>
+    <string name="charts_tab_macros">營養素</string>
+    <string name="charts_range_7">7 天</string>
+    <string name="charts_range_30">30 天</string>
+    <string name="charts_range_90">90 天</string>
+    <string name="charts_range_all">全部</string>
+    <string name="charts_range_fallback">最近 30 天沒有紀錄，顯示全部</string>
+    <string name="charts_empty_diary">這個區間沒有飲食紀錄</string>
+    <string name="charts_empty_weight">這個區間沒有體重紀錄</string>
+    <string name="charts_tap_hint">點圖上的資料看單日數值</string>
+    <string name="charts_pick_kcal">%1$s：%2$d 大卡</string>
+    <string name="charts_pick_weight">%1$s：%2$s 公斤</string>
+    <string name="charts_pick_weight_fat">%1$s：%2$s 公斤 · 體脂 %3$s％</string>
+    <string name="charts_pick_macros">%1$s：蛋白質 %2$s · 脂肪 %3$s · 碳水 %4$s（g）</string>
+    <string name="charts_target_line">目標 %1$d</string>
+    <string name="charts_legend_average">7 日平均</string>
+    <string name="charts_legend_target">目標</string>
+    <string name="charts_legend_body_fat">體脂率（右）</string>
+    <string name="charts_kcal_average">平均（大卡）</string>
+    <string name="charts_kcal_highest">最高（大卡）</string>
+    <string name="charts_kcal_lowest">最低（大卡）</string>
+    <string name="charts_on_target">達標天數</string>
+    <string name="charts_protein_on_target">蛋白質達標天數</string>
+    <string name="charts_days_ratio">%1$d / %2$d</string>
+    <string name="charts_weight_change">區間變化（公斤）</string>
+    <string name="charts_weight_first">起點（公斤）</string>
+    <string name="charts_weight_last">終點（公斤）</string>
+    <string name="charts_macro_average">%1$s 平均（g）</string>
 </resources>
