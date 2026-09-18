@@ -93,7 +93,7 @@ adb shell am start -a com.routina.family.action.RUN_CAPABILITY \
 | 顯示名稱 | applicationId | 位置 |
 |---|---|---|
 | Routina | `com.routina.hub` | 本專案 `:hub` |
-| Routina Flow | `com.routina.app` | [routina-flow](https://github.com/ImitatedSky/routina)（自動化；改名遷移中） |
+| Routina Flow | `com.routina.app` | [routina-flow](https://github.com/ImitatedSky/routina-flow)（自動化；applicationId 改名遷移中） |
 | Routina Bite | `com.routina.bite` | 本專案 `:apps:bite`（熱量飲食紀錄） |
 
 住在本專案裡的子 App 用**前綴標籤**發版（Bite 是 `bite-v0.1.0`），Hub 自己用裸的 `v0.1.0`，
