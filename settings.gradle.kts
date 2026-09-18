@@ -22,12 +22,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Routina"
 
-// Hub 本體。家族的其他子 App 之後各自加一個 :apps:xxx module，
-// 每個都是獨立的 application → 產出獨立 APK、獨立權限、獨立 release。
+// Hub 本體。家族的子 App 各自住在自己的 repo（Flow、Bite…），
+// 這裡只留 Hub 與它要用的共用層。
 include(":hub")
 
 // 共用層。contract 是「家族契約」的實作：掃描成員、讀能力、組 Intent。
 include(":core:contract")
-
-// 家族成員：Routina Bite（熱量飲食紀錄）
-include(":apps:bite")
