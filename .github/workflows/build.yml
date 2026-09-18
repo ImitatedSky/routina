@@ -3,22 +3,30 @@ name: Build
 on:
   push:
     branches: [main]
+    # Hub 是這個 monorepo 的主產品，用裸的 v* 標籤發版。
+    # 之後加進來的小工具模組各自用前綴標籤（calc-v*、notes-v*…），
+    # 不會誤觸發 Hub 的發版流程。
+    tags: ['v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
 
-# 預設最小權限：目前只有編譯檢查，讀取原始碼就夠。
-# 之後要加發佈 release 的 job 時，才在那個 job 內提升到 contents: write。
+# 預設最小權限：一般建置只需讀取原始碼。
+# 只有發佈 release 的 job 才提升到 contents: write（見下）。
 permissions:
   contents: read
 
+# 同一分支/標籤的重複觸發自動取消前一個，避免兩個 release job 搶同一個 tag。
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # 一般建置：push / PR / 手動觸發時只做「能不能編譯」的檢查，
+  # 完全不碰簽章 secret（debug 簽章 fallback 足以驗證編譯與 R8 規則）。
   build:
     name: Build (unsigned)
+    if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,15 +49,88 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 沒有 keystore secret 時 release 會 fallback 到 debug 簽章，
-      # 足以驗證「編譯得起來、R8 規則沒問題」。
       - name: Build (debug-signed fallback verifies compile)
         run: ./gradlew :hub:assembleRelease --no-daemon --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: hub-unsigned-apk
+          name: routina-hub-unsigned-apk
           path: hub/build/outputs/apk/release/*.apk
           if-no-files-found: error
           retention-days: 14
+
+  # 正式發佈：只在推送版本標籤（v*）時跑，是唯一動用簽章 secret 的地方。
+  #
+  # 刻意「不」掛 environment：Flow 在 v0.18.0 踩過——environment 預設只允許
+  # 受保護分支部署，會把來自 tag 的部署直接擋掉（畫面顯示 Failed to deploy）。
+  release:
+    name: Signed release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+        with:
+          packages: platform-tools
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build signed release APK
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 not set; refusing to publish an unsigned release"
+            exit 1
+          fi
+          # 密碼必須是純 ASCII。常見雷：用中文輸入法打密碼時把半形「-」變成全形「－」，
+          # Java 簽章會丟「Password is not ASCII」（Flow 的 v0.18.1 就是這樣失敗的）。
+          for var in KEYSTORE_PASSWORD KEY_PASSWORD; do
+            if printf '%s' "${!var}" | LC_ALL=C grep -q '[^ -~]'; then
+              echo "::error::$var contains a non-ASCII character (e.g. a full-width dash from an IME). Re-enter it as plain ASCII by copy-paste."
+              exit 1
+            fi
+          done
+          KEYSTORE_PATH="$RUNNER_TEMP/release.jks"
+          trap 'rm -f "$KEYSTORE_PATH"' EXIT
+          # 去掉貼上時可能夾帶的空白／換行（CR/LF），避免 base64 解碼失敗
+          if ! echo "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 -d > "$KEYSTORE_PATH"; then
+            echo "::error::KEYSTORE_BASE64 is not valid base64 — re-copy the whole base64 file and update the secret"
+            exit 1
+          fi
+          # 先驗證 keystore 能以密碼＋別名開啟，給出明確錯誤，
+          # 而不是後面 gradle 的模糊訊息
+          if ! keytool -list -keystore "$KEYSTORE_PATH" -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::Cannot open keystore — check KEYSTORE_PASSWORD and KEY_ALIAS (alias should be 'routina')"
+            exit 1
+          fi
+          export KEYSTORE_FILE="$KEYSTORE_PATH"
+          ./gradlew :hub:assembleRelease --no-daemon --stacktrace
+
+      # 每個標籤都是獨立且永久保留的 Release，附帶版本號的 APK 檔名供依版本下載。
+      # 檔名帶 -hub- 是為了與 Routina Flow 的 routina-flow-*.apk 一眼分得出來。
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp hub/build/outputs/apk/release/hub-release.apk "routina-hub-${GITHUB_REF_NAME}.apk"
+          gh release create "$GITHUB_REF_NAME" \
+            "routina-hub-${GITHUB_REF_NAME}.apk" \
+            --title "Routina ${GITHUB_REF_NAME}" \
+            --generate-notes
