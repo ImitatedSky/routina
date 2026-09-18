@@ -25,9 +25,13 @@ object ApkVerifier {
     }
 
     fun verify(context: Context, file: File, expectedPackage: String): Result {
+        // 同時要求兩種 flag。對 APK *檔案*（而不是已安裝的套件）來說，
+        // getPackageArchiveInfo 會填哪個欄位在各 API 版本上並不一致：
+        // V2/V3 簽章常常只有 apkContentsSigners 有內容，signingInfo 本身也可能是 null。
+        // 兩個都要、三個來源都看，才不會把有簽章的檔案誤判成沒簽章。
         @Suppress("DEPRECATION")
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            PackageManager.GET_SIGNING_CERTIFICATES
+            PackageManager.GET_SIGNING_CERTIFICATES or PackageManager.GET_SIGNATURES
         } else {
             PackageManager.GET_SIGNATURES
         }
@@ -53,19 +57,22 @@ object ApkVerifier {
         return Result.Ok
     }
 
+    /**
+     * 把所有可能的來源都收進來：實測（BlueStacks／API 28）發現只讀
+     * `signingCertificateHistory` 會拿到空清單，把有簽章的 APK 誤判成沒簽章。
+     */
     private fun signaturesOf(info: android.content.pm.PackageInfo): List<Signature> {
+        val found = mutableListOf<Signature>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val signing = info.signingInfo ?: return emptyList()
-            // 多簽章者時看 apkContentsSigners；單一簽章者時 history 才有內容
-            val list = if (signing.hasMultipleSigners()) {
-                signing.apkContentsSigners
-            } else {
-                signing.signingCertificateHistory
+            info.signingInfo?.let { signing ->
+                signing.apkContentsSigners?.let { found += it }
+                // 有輪替過金鑰時，歷史裡才會有多筆
+                runCatching { signing.signingCertificateHistory }.getOrNull()?.let { found += it }
             }
-            return list?.toList().orEmpty()
         }
         @Suppress("DEPRECATION")
-        return info.signatures?.toList().orEmpty()
+        info.signatures?.let { found += it }
+        return found.distinctBy { it.toCharsString() }
     }
 
     private fun sha256(bytes: ByteArray): String =

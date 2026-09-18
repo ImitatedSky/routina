@@ -116,11 +116,21 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
                 .filter { it.packageName !in coveredPackages }
                 .forEach { entries += fromInstalledOnly(it) }
 
-            _state.update {
-                it.copy(
-                    entries = entries.sortedWith(
-                        compareBy({ it.status.ordinal }, { it.name })
-                    ),
+            val sorted = entries.sortedWith(compareBy({ it.status.ordinal }, { it.name }))
+
+            // 交給系統安裝器之後，使用者裝完回來就會走到這裡。已經裝到最新的項目
+            // 不該還掛著「已交給系統安裝畫面」的提示，自己收掉。
+            val settled = sorted
+                .filter { it.status == CatalogEntry.Status.UP_TO_DATE }
+                .map { it.id }
+                .toSet()
+
+            _state.update { current ->
+                current.copy(
+                    entries = sorted,
+                    jobs = current.jobs.filterNot { (id, job) ->
+                        job is AppJob.HandedOff && id in settled
+                    },
                     loading = false,
                     registryError = if (registry == null) registryError else null
                 )
