@@ -168,6 +168,17 @@ private fun MemberCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                // 有開放能力才顯示這行。看得到能力，才知道這個成員能被別人叫來做什麼
+                if (member.capabilities.isNotEmpty()) {
+                    Text(
+                        text = stringResource(
+                            R.string.capabilities_label,
+                            member.capabilities.joinToString("、") { it.label }
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
             Box {
                 IconButton(onClick = { menuOpen = true }) {

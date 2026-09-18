@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hub 對家族開放的能力。格式定義見 core/contract/CapabilityReader.kt。
+  屬性刻意不帶 android: 命名空間（與 FileProvider 的 file_paths.xml 同樣作法）。
+-->
+<capabilities contract="1">
+    <capability
+        id="open_directory"
+        label="開啟家族目錄"
+        summary="把 Routina 的家族目錄帶到前景" />
+</capabilities>

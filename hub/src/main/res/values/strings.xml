@@ -14,4 +14,5 @@
 
     <string name="launch_failed">開不起來，這個成員可能沒有主畫面</string>
     <string name="capabilities_none">沒有對外開放的能力</string>
+    <string name="capabilities_label">能力：%1$s</string>
 </resources>
