@@ -24,6 +24,19 @@
         "repo": "ImitatedSky/routina-flow",
         "assetPattern": "routina-flow-*.apk"
       }
+    },
+    {
+      "id": "bite",
+      "name": "Routina Bite",
+      "summary": "熱量飲食紀錄",
+      "packageName": "com.routina.bite",
+      "icon": "icons/bite.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina",
+        "assetPattern": "routina-bite-*.apk",
+        "tagPrefix": "bite-v"
+      }
     }
   ]
 }

@@ -29,10 +29,10 @@
 
 ## 4. Hub 配合
 
-- [ ] 4.1 `catalog/Registry.kt`：`RegistrySource.tagPrefix: String = "v"`；`Version.normalize(raw, prefix)` 先去前綴再去 `v`，既有呼叫點改帶前綴
-- [ ] 4.2 `catalog/RegistryClient.latest`：改打 `/repos/{repo}/releases?per_page=30`，取第一個非 draft／prerelease 且 tag 以前綴開頭者，再依 `assetPattern` 挑附件；錯誤訊息照舊誠實
-- [ ] 4.3 `apps.json` 加 bite（`tagPrefix: "bite-v"`、`assetPattern: "routina-bite-*.apk"`、`packageName: com.routina.bite`、`icon: icons/bite.png`）；`README.md` 成員表加 Routina Bite
-- [ ] 4.4 `.github/workflows/build.yml`：`tags` 加 `bite-v*`；build job 改 `./gradlew assembleRelease`（全 module）並上傳兩支 APK、條件改 `github.ref_type != 'tag'`；新增 `release-bite` job（tag 去 `bite-v` 後與 `apps/bite` versionName 比對、`:apps:bite:assembleRelease`、`gh release create bite-vX.Y.Z routina-bite-vX.Y.Z.apk --title "Routina Bite vX.Y.Z"`），簽章步驟與 Hub 相同
+- [x] 4.1 `catalog/Registry.kt`：`RegistrySource.tagPrefix: String = "v"`；`Version.normalize(raw, prefix)` 先去前綴再去 `v`，既有呼叫點改帶前綴
+- [x] 4.2 `catalog/RegistryClient.latest`：改打 `/repos/{repo}/releases?per_page=30`，取第一個非 draft／prerelease 且 tag 以前綴開頭者，再依 `assetPattern` 挑附件；錯誤訊息照舊誠實
+- [x] 4.3 `apps.json` 加 bite（`tagPrefix: "bite-v"`、`assetPattern: "routina-bite-*.apk"`、`packageName: com.routina.bite`、`icon: icons/bite.png`）；`README.md` 成員表加 Routina Bite
+- [x] 4.4 `.github/workflows/build.yml`：`tags` 加 `bite-v*`；build job 改 `./gradlew assembleRelease`（全 module）並上傳兩支 APK、條件改 `github.ref_type != 'tag'`；新增 `release-bite` job（tag 去 `bite-v` 後與 `apps/bite` versionName 比對、`:apps:bite:assembleRelease`、`gh release create bite-vX.Y.Z routina-bite-vX.Y.Z.apk --title "Routina Bite vX.Y.Z"`），簽章步驟與 Hub 相同
 
 ## 5. 驗證與提交
 

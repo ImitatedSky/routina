@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     # Hub 是這個 monorepo 的主產品，用裸的 v* 標籤發版。
-    # 之後加進來的小工具模組各自用前綴標籤（calc-v*、notes-v*…），
-    # 不會誤觸發 Hub 的發版流程。
-    tags: ['v*']
+    # 住在這裡的子 App 各自用前綴標籤（bite-v*…）發自己的 release，
+    # 前綴標籤對 Hub 的 refs/tags/v 條件為 false，不會誤觸發 Hub 的發版流程。
+    tags: ['v*', 'bite-v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -26,7 +26,8 @@ jobs:
   # 完全不碰簽章 secret（debug 簽章 fallback 足以驗證編譯與 R8 規則）。
   build:
     name: Build (unsigned)
-    if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+    # 任何標籤都交給下面的 release job，這裡只管 push / PR / 手動觸發
+    if: ${{ github.ref_type != 'tag' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,14 +50,23 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      # 建全部 module：Hub 與子 App 都要在同一次 push 上驗證編譯與 R8 規則
       - name: Build (debug-signed fallback verifies compile)
-        run: ./gradlew :hub:assembleRelease --no-daemon --stacktrace
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
 
-      - name: Upload APK artifact
+      - name: Upload Hub APK artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: routina-hub-unsigned-apk
           path: hub/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload Bite APK artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: routina-bite-unsigned-apk
+          path: apps/bite/build/outputs/apk/release/*.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -148,4 +158,91 @@ jobs:
           gh release create "$GITHUB_REF_NAME" \
             "routina-hub-${GITHUB_REF_NAME}.apk" \
             --title "Routina ${GITHUB_REF_NAME}" \
+            --generate-notes
+
+  # 子 App 的發佈：只在推送 bite-v* 標籤時跑。
+  # 和上面的 release job 用同一把 keystore——家族全體共用簽章，成員才能就地更新。
+  release-bite:
+    name: Signed release (Bite)
+    if: startsWith(github.ref, 'refs/tags/bite-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+        with:
+          packages: platform-tools
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      # 同 Hub：tag 與 versionName 不一致會讓 Hub 誤判有沒有新版，在這裡就擋下來。
+      - name: Check the tag matches versionName
+        run: |
+          VN=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' apps/bite/build.gradle.kts | head -1)
+          if [ -z "$VN" ]; then
+            echo "::error::could not read versionName from apps/bite/build.gradle.kts"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_NAME" != "bite-v$VN" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match versionName $VN (expected bite-v$VN)"
+            exit 1
+          fi
+          echo "tag $GITHUB_REF_NAME matches versionName $VN"
+
+      - name: Build signed release APK
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 not set; refusing to publish an unsigned release"
+            exit 1
+          fi
+          # 密碼必須是純 ASCII。常見雷：用中文輸入法打密碼時把半形「-」變成全形「－」，
+          # Java 簽章會丟「Password is not ASCII」（Flow 的 v0.18.1 就是這樣失敗的）。
+          for var in KEYSTORE_PASSWORD KEY_PASSWORD; do
+            if printf '%s' "${!var}" | LC_ALL=C grep -q '[^ -~]'; then
+              echo "::error::$var contains a non-ASCII character (e.g. a full-width dash from an IME). Re-enter it as plain ASCII by copy-paste."
+              exit 1
+            fi
+          done
+          KEYSTORE_PATH="$RUNNER_TEMP/release.jks"
+          trap 'rm -f "$KEYSTORE_PATH"' EXIT
+          # 去掉貼上時可能夾帶的空白／換行（CR/LF），避免 base64 解碼失敗
+          if ! echo "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 -d > "$KEYSTORE_PATH"; then
+            echo "::error::KEYSTORE_BASE64 is not valid base64 — re-copy the whole base64 file and update the secret"
+            exit 1
+          fi
+          # 先驗證 keystore 能以密碼＋別名開啟，給出明確錯誤，
+          # 而不是後面 gradle 的模糊訊息
+          if ! keytool -list -keystore "$KEYSTORE_PATH" -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::Cannot open keystore — check KEYSTORE_PASSWORD and KEY_ALIAS (alias should be 'routina')"
+            exit 1
+          fi
+          export KEYSTORE_FILE="$KEYSTORE_PATH"
+          ./gradlew :apps:bite:assembleRelease --no-daemon --stacktrace
+
+      # APK 檔名用 routina-bite-vX.Y.Z.apk，對得上 apps.json 裡 bite 的 assetPattern。
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VN=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' apps/bite/build.gradle.kts | head -1)
+          cp apps/bite/build/outputs/apk/release/bite-release.apk "routina-bite-v${VN}.apk"
+          gh release create "$GITHUB_REF_NAME" \
+            "routina-bite-v${VN}.apk" \
+            --title "Routina Bite v${VN}" \
             --generate-notes

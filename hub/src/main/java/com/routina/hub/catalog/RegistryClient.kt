@@ -3,6 +3,7 @@ package com.routina.hub.catalog
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -57,7 +58,7 @@ class RegistryClient(private val context: Context) {
     /**
      * 問某個成員的最新版本。[force] 為 false 且快取還新鮮時直接用快取。
      *
-     * 查不到（沒有任何 release、附件名稱對不上 pattern、額度用完、離線）
+     * 查不到（沒有符合前綴的 release、附件名稱對不上 pattern、額度用完、離線）
      * 一律回 failure，由畫面顯示「查不到最新版」而不是假裝沒有更新。
      */
     suspend fun latest(app: RegistryApp, force: Boolean): Result<RemoteVersion> =
@@ -72,7 +73,10 @@ class RegistryClient(private val context: Context) {
                 cachedRemote(app.id)?.let { return@withContext Result.success(it) }
             }
 
-            val url = "https://api.github.com/repos/${app.source.repo}/releases/latest"
+            // 列 releases 而不是問 /releases/latest：同一個 repo 裡住著多個成員時，
+            // 「最新的 release」可能是別人的版本。GitHub 依建立時間倒序回傳，
+            // 所以第一個符合前綴的就是這個成員的最新版。
+            val url = "https://api.github.com/repos/${app.source.repo}/releases?per_page=30"
             val body = runCatching { get(url, githubApi = true) }
                 .getOrElse { error ->
                     // 查不到就退回快取（可能過期但比空白有用）
@@ -81,9 +85,15 @@ class RegistryClient(private val context: Context) {
                     else Result.failure(error)
                 }
 
-            val release = runCatching {
-                json.decodeFromString(GithubRelease.serializer(), body)
+            val releases = runCatching {
+                json.decodeFromString(ListSerializer(GithubRelease.serializer()), body)
             }.getOrNull() ?: return@withContext Result.failure(IOException("release 格式看不懂"))
+
+            val release = releases.firstOrNull {
+                !it.draft && !it.prerelease && it.tagName.startsWith(app.source.tagPrefix)
+            } ?: return@withContext Result.failure(
+                IOException("找不到 ${app.source.tagPrefix} 開頭的 release")
+            )
 
             val matcher = globToRegex(app.source.assetPattern)
             val asset = release.assets.firstOrNull { matcher.matches(it.name) }
@@ -92,7 +102,7 @@ class RegistryClient(private val context: Context) {
                 )
 
             val remote = RemoteVersion(
-                version = Version.normalize(release.tagName),
+                version = Version.normalize(release.tagName, app.source.tagPrefix),
                 downloadUrl = asset.downloadUrl,
                 sizeBytes = asset.size
             )

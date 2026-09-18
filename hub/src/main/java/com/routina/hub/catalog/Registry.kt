@@ -38,7 +38,7 @@ data class RegistryApp(
 /**
  * 成員的發佈來源。
  *
- * 刻意只記 [repo] 而不寫死 APK 的網址：Hub 去問 GitHub 要「最新的 release」，
+ * 刻意只記 [repo] 而不寫死 APK 的網址：Hub 去問 GitHub 要「tag 以 [tagPrefix] 開頭的最新 release」，
  * 所以發新版不用回頭改 registry。
  */
 @Serializable
@@ -47,7 +47,14 @@ data class RegistrySource(
     /** `owner/repo` */
     val repo: String,
     /** 從 release 的附件裡挑檔案用的 glob，例 `routina-flow-*.apk` */
-    val assetPattern: String
+    val assetPattern: String,
+    /**
+     * 這個成員的 tag 前綴，例 `bite-v`。
+     *
+     * 同一個 repo 裡住著多個成員時（monorepo），只靠「最新的 release」會拿到別人的版本，
+     * 所以改成用前綴認自己的 release。舊的 registry 沒有這個欄位，預設 `v` 就是原本的行為。
+     */
+    val tagPrefix: String = "v"
 ) {
     companion object {
         const val TYPE_GITHUB_RELEASE = "github-release"
@@ -81,15 +88,25 @@ data class RemoteVersion(
 /**
  * 版本比較。
  *
- * 家族的慣例是 tag `vX.Y.Z` 等於 APK 的 versionName `X.Y.Z`，所以直接比數字段落即可
+ * 家族的慣例是 tag `vX.Y.Z`（住在 monorepo 的成員是 `bite-vX.Y.Z` 這種前綴形式）
+ * 等於 APK 的 versionName `X.Y.Z`，所以去掉前綴後直接比數字段落即可
  * （CI 會擋下兩者不一致的發版，見 build.yml 的 tag 檢查）。
  * 比不出來時一律當成「不確定」，由呼叫端決定要不要提示更新——
  * 寧可少提示一次，也不要誤報一個不存在的新版。
  */
 object Version {
 
-    /** 去掉開頭的 v 與前後空白 */
-    fun normalize(raw: String): String = raw.trim().removePrefix("v").removePrefix("V")
+    /** 去掉前後空白、成員的 tag 前綴（不分大小寫），再去掉開頭的 v */
+    fun normalize(raw: String, tagPrefix: String = "v"): String {
+        val trimmed = raw.trim()
+        val withoutPrefix =
+            if (tagPrefix.isNotEmpty() && trimmed.startsWith(tagPrefix, ignoreCase = true)) {
+                trimmed.substring(tagPrefix.length)
+            } else {
+                trimmed
+            }
+        return withoutPrefix.removePrefix("v").removePrefix("V")
+    }
 
     /**
      * @return 正數表示 [a] 較新、負數表示 [b] 較新、0 表示相同；

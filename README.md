@@ -94,6 +94,10 @@ adb shell am start -a com.routina.family.action.RUN_CAPABILITY \
 |---|---|---|
 | Routina | `com.routina.hub` | 本專案 `:hub` |
 | Routina Flow | `com.routina.app` | [routina-flow](https://github.com/ImitatedSky/routina)（自動化；改名遷移中） |
+| Routina Bite | `com.routina.bite` | 本專案 `:apps:bite`（熱量飲食紀錄） |
+
+住在本專案裡的子 App 用**前綴標籤**發版（Bite 是 `bite-v0.1.0`），Hub 自己用裸的 `v0.1.0`，
+兩者的 release 因此分得開——Hub 查最新版時只看 tag 以自己前綴開頭的那些。
 
 ## 建置
 
