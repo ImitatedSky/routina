@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 // ---- Release 簽章的來源 ----
@@ -36,8 +37,8 @@ android {
         applicationId = "com.routina.hub"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "0.0.2"
+        versionCode = 3
+        versionName = "0.3.1"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -109,6 +110,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)

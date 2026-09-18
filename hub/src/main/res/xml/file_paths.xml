@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  只開放下載 APK 用的那一個快取子目錄給系統安裝器讀取。
+  範圍刻意收到最小：不是整個 cache、更不是整個私有目錄。
+-->
+<paths>
+    <cache-path
+        name="apk"
+        path="apk/" />
+</paths>

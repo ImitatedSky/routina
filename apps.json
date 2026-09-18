@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "apps": [
+    {
+      "id": "hub",
+      "name": "Routina",
+      "summary": "家族目錄與管理",
+      "packageName": "com.routina.hub",
+      "icon": "icons/hub.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina",
+        "assetPattern": "routina-hub-*.apk"
+      }
+    },
+    {
+      "id": "flow",
+      "name": "Routina Flow",
+      "summary": "日常自動化",
+      "packageName": "com.routina.app",
+      "icon": "icons/flow.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina-flow",
+        "assetPattern": "routina-flow-*.apk"
+      }
+    }
+  ]
+}

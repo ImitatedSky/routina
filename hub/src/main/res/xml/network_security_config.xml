@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  一律禁止明文流量。Hub 只會連 GitHub（raw.githubusercontent.com、api.github.com、
+  objects.githubusercontent.com），全部都有 HTTPS，沒有任何需要例外的情況。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

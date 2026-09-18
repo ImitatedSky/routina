@@ -7,12 +7,28 @@
 
     <string name="empty_title">還沒有家族成員</string>
     <string name="empty_body">家族成員是各自獨立安裝的 App。裝好之後會自動出現在這裡，不需要設定。</string>
+    <string name="empty_offline_title">讀不到家族名冊</string>
 
     <string name="action_open">開啟</string>
     <string name="action_app_info">App 資訊</string>
-    <string name="action_refresh">重新掃描</string>
+    <string name="action_refresh">重新整理</string>
+    <string name="action_install">安裝</string>
+    <string name="action_update">更新</string>
+    <string name="action_retry">重試</string>
+    <string name="action_dismiss">關閉</string>
+    <string name="action_ok">好</string>
+    <string name="action_open_settings">前往設定</string>
 
     <string name="launch_failed">開不起來，這個成員可能沒有主畫面</string>
     <string name="capabilities_none">沒有對外開放的能力</string>
     <string name="capabilities_label">能力：%1$s</string>
+
+    <string name="registry_offline">名冊讀不到，下面只列出已安裝的成員</string>
+    <string name="version_unknown">查不到可安裝的版本</string>
+    <string name="version_latest">已是最新</string>
+
+    <string name="job_downloading">下載中 %1$s / %2$s</string>
+    <string name="job_verifying">正在驗證簽章…</string>
+    <string name="job_handed_off">已交給系統安裝畫面，完成後回到這裡會自動更新狀態</string>
+    <string name="job_needs_permission">還需要你允許 Routina 安裝應用程式。開啟之後回來按重試。</string>
 </resources>

@@ -88,6 +88,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      # Hub 用 tag 的版號跟已安裝的 versionName 比對來判斷「有沒有新版」，
+      # 兩者一旦不一致就會誤判。在這裡擋下來，比事後除錯便宜。
+      - name: Check the tag matches versionName
+        run: |
+          VN=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' hub/build.gradle.kts | head -1)
+          if [ -z "$VN" ]; then
+            echo "::error::could not read versionName from hub/build.gradle.kts"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_NAME" != "v$VN" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match versionName $VN (expected v$VN)"
+            exit 1
+          fi
+          echo "tag $GITHUB_REF_NAME matches versionName $VN"
+
       - name: Build signed release APK
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}

@@ -2,17 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
-      Hub 不需要任何權限。掃描家族成員靠的是 :core:contract 帶進來的
-      <queries> 套件可見性宣告，那不是權限，使用者不必授權任何東西。
-
-      之後 v0.3 做「從 GitHub 下載安裝」才會需要 INTERNET 與
-      REQUEST_INSTALL_PACKAGES —— 到那時再加，現在保持零權限。
+      掃描家族成員本身不需要權限（靠 :core:contract 帶進來的 <queries> 套件可見性宣告）。
+      下面這三個是 v0.3 的「從 GitHub 下載安裝」才需要的：
+      前兩個用來讀名冊與下載 APK，第三個讓 Hub 能叫出系統的安裝畫面。
     -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
 
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Routina">
@@ -69,6 +72,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
+        <!--
+          把下載好的 APK 交給系統安裝器。檔案在 Hub 的私有快取裡，
+          安裝器讀不到，所以發一個臨時可讀的 content URI 過去。
+          exported=false + grantUriPermissions：只有被明確授權的接收者讀得到。
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 
