@@ -65,6 +65,13 @@ data class CatalogUiState(
     /** 成員 id → 快取裡已經下載了多少位元組。行程被回收後靠它讓按鈕說得出「繼續下載」 */
     val resumable: Map<String, Long> = emptyMap(),
     val loading: Boolean = false,
+    /**
+     * 這次重新整理是使用者主動要求的（下拉或按重新整理鈕）。
+     *
+     * 與 [loading] 分開：每次回到前景都會重新整理一次，那種時候不該把下拉的
+     * 轉圈動畫拉出來——使用者沒有要求，畫面卻自己動，看起來像壞掉。
+     */
+    val refreshing: Boolean = false,
     /** 名冊本身讀不到時的提示。此時仍會列出已安裝的成員 */
     val registryError: String? = null
 )
@@ -90,7 +97,7 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun refresh(force: Boolean = false) {
         viewModelScope.launch {
-            _state.update { it.copy(loading = true) }
+            _state.update { it.copy(loading = true, refreshing = force) }
 
             val app = getApplication<Application>()
             val installed = FamilyScanner.scan(app).associateBy { it.packageName }
@@ -139,6 +146,7 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
                         job is AppJob.HandedOff && id in settled
                     },
                     loading = false,
+                    refreshing = false,
                     registryError = if (registry == null) registryError else null
                 )
             }

@@ -1,6 +1,8 @@
 package com.routina.hub.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -100,7 +103,8 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                     }
                 },
                 actions = {
-                    if (state.loading) {
+                    // 下拉時指示器已經在畫面上了，頂列不用再轉一個
+                    if (state.loading && !state.refreshing) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(22.dp).padding(end = 4.dp),
                             strokeWidth = 2.dp
@@ -118,13 +122,19 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        if (state.entries.isEmpty() && !state.loading) {
-            EmptyState(state.registryError, Modifier.padding(innerPadding))
+        // 下拉＝和右上角那顆一樣的強制重新整理（真的去問 GitHub，不吃快取）
+        PullToRefreshBox(
+            isRefreshing = state.refreshing,
+            onRefresh = { viewModel.refresh(force = true) },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            if (state.entries.isEmpty() && !state.loading) {
+            EmptyState(state.registryError)
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -183,6 +193,7 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                     cards(installed)
                 }
             }
+        }
         }
     }
 }
@@ -495,33 +506,37 @@ private fun EntryIcon(entry: CatalogEntry) {
 
 @Composable
 private fun EmptyState(registryError: String?, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize().padding(horizontal = 32.dp),
-        contentAlignment = Alignment.Center
+    // 用可捲動的 Column 而不是 Box：PullToRefreshBox 要子元素能接手勢，
+    // 而名冊讀不到、畫面空白時正是最想下拉重試的時候
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                imageVector = if (registryError != null) Icons.Filled.CloudOff else Icons.Filled.Apps,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = stringResource(
-                    if (registryError != null) R.string.empty_offline_title else R.string.empty_title
-                ),
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = registryError ?: stringResource(R.string.empty_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-        }
+        Icon(
+            imageVector = if (registryError != null) Icons.Filled.CloudOff else Icons.Filled.Apps,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = stringResource(
+                if (registryError != null) R.string.empty_offline_title else R.string.empty_title
+            ),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = registryError ?: stringResource(R.string.empty_body),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
