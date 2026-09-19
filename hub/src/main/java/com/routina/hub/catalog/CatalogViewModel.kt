@@ -27,6 +27,8 @@ data class CatalogEntry(
     /** 查不到遠端版本時的原因，誠實顯示而不是假裝沒有更新 */
     val remoteError: String?,
     val capabilities: List<Capability>,
+    /** 名冊上的 `owner/repo`；沒登記在名冊上的成員（手動側載）會是 null */
+    val repo: String?,
     val status: Status
 ) {
     enum class Status {
@@ -185,6 +187,7 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
             remote = remote,
             remoteError = remoteResult.exceptionOrNull()?.message,
             capabilities = local?.capabilities.orEmpty(),
+            repo = listed.source.repo.takeIf { it.isNotBlank() },
             status = status
         )
     }
@@ -217,6 +220,7 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
         remote = null,
         remoteError = null,
         capabilities = local.capabilities,
+        repo = null,
         status = CatalogEntry.Status.INSTALLED_UNKNOWN
     )
 

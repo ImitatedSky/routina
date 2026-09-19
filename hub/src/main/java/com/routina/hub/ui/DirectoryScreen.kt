@@ -1,5 +1,7 @@
 package com.routina.hub.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -131,69 +133,72 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                 .padding(innerPadding)
         ) {
             if (state.entries.isEmpty() && !state.loading) {
-            EmptyState(state.registryError)
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                // 名冊讀不到時仍列出已安裝的成員，但要說清楚為什麼清單可能不完整
-                state.registryError?.let { message ->
-                    item(key = "registry-error") { OfflineNotice(message) }
-                }
-
-                // 分成兩區而不是混在一份清單裡：「還有什麼可以裝」是使用者最常來這裡問的問題，
-                // 要一眼看得出來，不該靠卡片上有沒有按鈕去分辨。
-                val available = state.entries
-                    .filter { it.status == CatalogEntry.Status.NOT_INSTALLED }
-                val installed = state.entries.filterNot {
-                    it.status == CatalogEntry.Status.NOT_INSTALLED
-                }
-
-                item(key = "header-available") {
-                    SectionHeader(stringResource(R.string.section_available), available.size)
-                }
-                if (available.isEmpty()) {
-                    item(key = "available-empty") {
-                        Text(
-                            text = stringResource(R.string.section_all_installed),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                EmptyState(state.registryError)
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    // 名冊讀不到時仍列出已安裝的成員，但要說清楚為什麼清單可能不完整
+                    state.registryError?.let { message ->
+                        item(key = "registry-error") { OfflineNotice(message) }
                     }
-                }
 
-                fun cards(entries: List<CatalogEntry>) {
-                    items(entries, key = { it.id }) { entry ->
-                        EntryCard(
-                            entry = entry,
-                            job = state.jobs[entry.id],
-                            resumableBytes = state.resumable[entry.id] ?: 0L,
-                            onOpen = {
-                                if (!FamilyScanner.launch(context, entry.packageName)) {
-                                    scope.launch { snackbarHostState.showSnackbar(launchFailed) }
-                                }
-                            },
-                            onInstall = { viewModel.install(entry) },
-                            onRetry = { viewModel.retryInstall(entry) },
-                            onDismissJob = { viewModel.clearJob(entry.id) },
-                            onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
-                            onGrantInstall = { ApkInstaller.openInstallPermission(context) }
-                        )
+                    // 分成兩區而不是混在一份清單裡：「還有什麼可以裝」是使用者最常來這裡問的問題，
+                    // 要一眼看得出來，不該靠卡片上有沒有按鈕去分辨。
+                    val available = state.entries
+                        .filter { it.status == CatalogEntry.Status.NOT_INSTALLED }
+                    val installed = state.entries.filterNot {
+                        it.status == CatalogEntry.Status.NOT_INSTALLED
                     }
-                }
 
-                cards(available)
-
-                if (installed.isNotEmpty()) {
-                    item(key = "header-installed") {
-                        SectionHeader(stringResource(R.string.section_installed), installed.size)
+                    // 已安裝擺前面：開 Hub 多半是要用手上的 App。而且全部裝好時
+                    // 「可安裝 0」若在最上面，只是把真正要用的東西往下推
+                    if (installed.isNotEmpty()) {
+                        item(key = "header-installed") {
+                            SectionHeader(stringResource(R.string.section_installed), installed.size)
+                        }
                     }
+
+                    fun cards(entries: List<CatalogEntry>) {
+                        items(entries, key = { it.id }) { entry ->
+                            EntryCard(
+                                entry = entry,
+                                job = state.jobs[entry.id],
+                                resumableBytes = state.resumable[entry.id] ?: 0L,
+                                onOpen = {
+                                    if (!FamilyScanner.launch(context, entry.packageName)) {
+                                        scope.launch { snackbarHostState.showSnackbar(launchFailed) }
+                                    }
+                                },
+                                onInstall = { viewModel.install(entry) },
+                                onRetry = { viewModel.retryInstall(entry) },
+                                onDismissJob = { viewModel.clearJob(entry.id) },
+                                onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
+                                onOpenGithub = { entry.repo?.let { openReleasesPage(context, it) } },
+                                onGrantInstall = { ApkInstaller.openInstallPermission(context) }
+                            )
+                        }
+                    }
+
                     cards(installed)
+
+                    item(key = "header-available") {
+                        SectionHeader(stringResource(R.string.section_available), available.size)
+                    }
+                    if (available.isEmpty()) {
+                        item(key = "available-empty") {
+                            Text(
+                                text = stringResource(R.string.section_all_installed),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    cards(available)
                 }
             }
-        }
         }
     }
 }
@@ -261,6 +266,7 @@ private fun EntryCard(
     onRetry: () -> Unit,
     onDismissJob: () -> Unit,
     onAppInfo: () -> Unit,
+    onOpenGithub: () -> Unit,
     onGrantInstall: () -> Unit
 ) {
     var menuOpen by remember { mutableStateOf(false) }
@@ -297,20 +303,29 @@ private fun EntryCard(
                         )
                     }
                 }
-                if (entry.installed) {
+                // 未安裝的成員也給選單：那時候最想做的事就是先去 GitHub 看看這是什麼
+                if (entry.installed || entry.repo != null) {
                     Box {
                         IconButton(onClick = { menuOpen = true }) {
                             Icon(Icons.Filled.MoreVert, contentDescription = null)
                         }
                         DropdownMenu(menuOpen, onDismissRequest = { menuOpen = false }) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_open)) },
-                                onClick = { menuOpen = false; onOpen() }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_app_info)) },
-                                onClick = { menuOpen = false; onAppInfo() }
-                            )
+                            if (entry.installed) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_open)) },
+                                    onClick = { menuOpen = false; onOpen() }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_app_info)) },
+                                    onClick = { menuOpen = false; onAppInfo() }
+                                )
+                            }
+                            if (entry.repo != null) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_github)) },
+                                    onClick = { menuOpen = false; onOpenGithub() }
+                                )
+                            }
                         }
                     }
                 }
@@ -546,4 +561,18 @@ private fun sizeText(bytes: Long): String = when {
     bytes < 1024 -> "$bytes B"
     bytes < 1024 * 1024 -> "%.0f KB".format(bytes / 1024.0)
     else -> "%.1f MB".format(bytes / (1024.0 * 1024.0))
+}
+
+/**
+ * 開這個成員的 GitHub release 頁。
+ *
+ * 指向 releases 而不是 repo 首頁：從目錄點過去，想看的是版本與更新內容，
+ * 而不是原始碼。開不起來（裝置上沒有瀏覽器）就安靜略過——這只是個捷徑。
+ */
+private fun openReleasesPage(context: android.content.Context, repo: String) {
+    runCatching {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/$repo/releases"))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
 }

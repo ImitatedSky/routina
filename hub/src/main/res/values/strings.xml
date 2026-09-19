@@ -11,6 +11,7 @@
 
     <string name="action_open">開啟</string>
     <string name="action_app_info">App 資訊</string>
+    <string name="action_github">在 GitHub 查看</string>
     <string name="action_refresh">重新整理</string>
     <string name="action_install">安裝</string>
     <string name="action_update">更新</string>
