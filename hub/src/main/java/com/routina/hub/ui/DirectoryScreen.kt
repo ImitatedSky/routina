@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
@@ -55,8 +56,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -72,6 +75,8 @@ import com.routina.hub.catalog.CatalogEntry
 import com.routina.hub.catalog.CatalogViewModel
 import com.routina.hub.catalog.RemoteIcons
 import kotlinx.coroutines.launch
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 /**
  * 家族目錄：列出裝置上已安裝的成員，以及名冊上可以安裝的成員。
@@ -86,6 +91,17 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val haptic = LocalHapticFeedback.current
+    val listState = rememberLazyListState()
+    // 只有「已安裝」可以拖；拖到標題或未安裝的卡片上不算數
+    val reorderState = rememberReorderableLazyListState(listState) { from, to ->
+        val installedIds = state.entries.filter { it.installed }.map { it.id }
+        val fromId = from.key as? String
+        val toId = to.key as? String
+        if (fromId in installedIds && toId in installedIds) {
+            viewModel.move(fromId!!, toId!!)
+        }
+    }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh(force = false) }
 
@@ -132,11 +148,14 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (state.entries.isEmpty() && !state.loading) {
-                EmptyState(state.registryError)
+            if (state.entries.isEmpty()) {
+                // 第一次載入還沒有資料時先不畫清單：否則清單會停在先出現的「可安裝」標題上，
+                // 等已安裝的卡片插到上面後，畫面一開就是捲到底的
+                if (!state.loading) EmptyState(state.registryError)
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
+                    state = listState,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -161,28 +180,46 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                         }
                     }
 
-                    fun cards(entries: List<CatalogEntry>) {
-                        items(entries, key = { it.id }) { entry ->
-                            EntryCard(
+                    @Composable
+                    fun card(
+                        entry: CatalogEntry,
+                        modifier: Modifier = Modifier,
+                        dragging: Boolean = false
+                    ) {
+                        EntryCard(
+                            entry = entry,
+                            modifier = modifier,
+                            dragging = dragging,
+                            job = state.jobs[entry.id],
+                            resumableBytes = state.resumable[entry.id] ?: 0L,
+                            onOpen = {
+                                if (!FamilyScanner.launch(context, entry.packageName)) {
+                                    scope.launch { snackbarHostState.showSnackbar(launchFailed) }
+                                }
+                            },
+                            onInstall = { viewModel.install(entry) },
+                            onRetry = { viewModel.retryInstall(entry) },
+                            onDismissJob = { viewModel.clearJob(entry.id) },
+                            onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
+                            onOpenGithub = { entry.repo?.let { openReleasesPage(context, it) } },
+                            onGrantInstall = { ApkInstaller.openInstallPermission(context) }
+                        )
+                    }
+
+                    // 已安裝：長按拖曳調整順序
+                    items(installed, key = { it.id }) { entry ->
+                        ReorderableItem(reorderState, key = entry.id) { dragging ->
+                            card(
                                 entry = entry,
-                                job = state.jobs[entry.id],
-                                resumableBytes = state.resumable[entry.id] ?: 0L,
-                                onOpen = {
-                                    if (!FamilyScanner.launch(context, entry.packageName)) {
-                                        scope.launch { snackbarHostState.showSnackbar(launchFailed) }
+                                modifier = Modifier.longPressDraggableHandle(
+                                    onDragStarted = {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     }
-                                },
-                                onInstall = { viewModel.install(entry) },
-                                onRetry = { viewModel.retryInstall(entry) },
-                                onDismissJob = { viewModel.clearJob(entry.id) },
-                                onAppInfo = { FamilyScanner.openAppInfo(context, entry.packageName) },
-                                onOpenGithub = { entry.repo?.let { openReleasesPage(context, it) } },
-                                onGrantInstall = { ApkInstaller.openInstallPermission(context) }
+                                ),
+                                dragging = dragging
                             )
                         }
                     }
-
-                    cards(installed)
 
                     item(key = "header-available") {
                         SectionHeader(stringResource(R.string.section_available), available.size)
@@ -196,7 +233,7 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                             )
                         }
                     }
-                    cards(available)
+                    items(available, key = { it.id }) { entry -> card(entry) }
                 }
             }
         }
@@ -259,6 +296,8 @@ private fun OfflineNotice(message: String) {
 @Composable
 private fun EntryCard(
     entry: CatalogEntry,
+    modifier: Modifier,
+    dragging: Boolean,
     job: AppJob?,
     resumableBytes: Long,
     onOpen: () -> Unit,
@@ -272,11 +311,13 @@ private fun EntryCard(
     var menuOpen by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             // 只有裝好的才能點整張卡開啟；沒裝的點了沒有意義
             .then(if (entry.installed) Modifier.clickable(onClick = onOpen) else Modifier),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        // 拖曳中的卡片浮起來，看得出手上抓的是哪一張
+        elevation = CardDefaults.cardElevation(defaultElevation = if (dragging) 8.dp else 1.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

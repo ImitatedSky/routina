@@ -88,6 +88,7 @@ data class CatalogUiState(
 class CatalogViewModel(app: Application) : AndroidViewModel(app) {
 
     private val client = RegistryClient(app)
+    private val order = AppOrder(app)
     private val _state = MutableStateFlow(CatalogUiState())
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
 
@@ -129,7 +130,7 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
                 .filter { it.packageName !in coveredPackages }
                 .forEach { entries += fromInstalledOnly(it) }
 
-            val sorted = entries.sortedWith(compareBy({ it.status.ordinal }, { it.name }))
+            val sorted = arrange(entries)
 
             // 交給系統安裝器之後，使用者裝完回來就會走到這裡。已經裝到最新的項目
             // 不該還掛著「已交給系統安裝畫面」的提示，自己收掉。
@@ -153,6 +154,32 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
                 )
             }
         }
+    }
+
+    /**
+     * 已安裝的照使用者排的順序（新裝的排最後），未安裝的照名冊順序。
+     * 不依狀態或名稱排，否則一有更新項目就會跳位置。
+     */
+    private fun arrange(entries: List<CatalogEntry>): List<CatalogEntry> {
+        val saved = order.load()
+        val (installed, available) = entries.partition { it.installed }
+        val ordered = installed.sortedBy { entry ->
+            saved.indexOf(entry.id).takeIf { it >= 0 } ?: Int.MAX_VALUE
+        }
+        return ordered + available
+    }
+
+    /** 拖曳排序：把 [fromId] 移到 [toId] 的位置，並記住新的順序 */
+    fun move(fromId: String, toId: String) {
+        _state.update { current ->
+            val list = current.entries.toMutableList()
+            val from = list.indexOfFirst { it.id == fromId }
+            val to = list.indexOfFirst { it.id == toId }
+            if (from < 0 || to < 0) return@update current
+            list.add(to, list.removeAt(from))
+            current.copy(entries = list)
+        }
+        order.save(_state.value.entries.filter { it.installed }.map { it.id })
     }
 
     private fun merge(

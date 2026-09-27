@@ -112,6 +112,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.reorderable)
 
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
