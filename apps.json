@@ -60,6 +60,18 @@
         "repo": "ImitatedSky/wordcards",
         "assetPattern": "routina-words-*.apk"
       }
+    },
+    {
+      "id": "tone",
+      "name": "Routina Tone",
+      "summary": "照片調色",
+      "packageName": "com.routina.tone",
+      "icon": "icons/tone.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina-tone",
+        "assetPattern": "routina-tone-*.apk"
+      }
     }
   ]
 }
