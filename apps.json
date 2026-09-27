@@ -38,6 +38,18 @@
       }
     },
     {
+      "id": "fit",
+      "name": "Routina Fit",
+      "summary": "運動訓練與計數",
+      "packageName": "com.routina.fit",
+      "icon": "icons/fit.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina-fit",
+        "assetPattern": "routina-fit-*.apk"
+      }
+    },
+    {
       "id": "words",
       "name": "Routina Words",
       "summary": "英文單字卡",
