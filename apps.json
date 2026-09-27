@@ -36,6 +36,18 @@
         "repo": "ImitatedSky/routina-bite",
         "assetPattern": "routina-bite-*.apk"
       }
+    },
+    {
+      "id": "words",
+      "name": "Routina Words",
+      "summary": "英文單字卡",
+      "packageName": "com.routina.words",
+      "icon": "icons/words.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/wordcards",
+        "assetPattern": "routina-words-*.apk"
+      }
     }
   ]
 }
