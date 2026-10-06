@@ -26,6 +26,11 @@ class AppOrder(context: Context) {
         prefs.edit().putString(KEY_ORDER, (visible + kept).joinToString(",")).apply()
     }
 
+    /** 忘掉使用者排過的順序，已安裝的成員回到名冊上的順序 */
+    fun clear() {
+        prefs.edit().remove(KEY_ORDER).apply()
+    }
+
     private companion object {
         const val PREFS = "hub_order"
         const val KEY_ORDER = "installed_order"

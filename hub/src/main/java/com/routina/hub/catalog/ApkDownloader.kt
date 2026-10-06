@@ -162,6 +162,10 @@ object ApkDownloader {
         }
     }
 
+    /** 快取裡所有安裝檔加起來的大小，下載到一半的 .part 也算在內 */
+    fun cacheBytes(context: Context): Long =
+        runCatching { dir(context).listFiles()?.sumOf { it.length() } ?: 0L }.getOrDefault(0L)
+
     /** 清掉暫存的 APK。安裝流程走完就不需要留著它們 */
     fun clear(context: Context) {
         runCatching { dir(context).listFiles()?.forEach { it.delete() } }

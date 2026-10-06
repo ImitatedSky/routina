@@ -75,8 +75,14 @@ data class CatalogUiState(
      */
     val refreshing: Boolean = false,
     /** 名冊本身讀不到時的提示。此時仍會列出已安裝的成員 */
-    val registryError: String? = null
-)
+    val registryError: String? = null,
+    /** 下載快取目前佔用的位元組數，設定頁顯示用。要呼叫 loadCacheSize() 才會更新 */
+    val cacheBytes: Long = 0L
+) {
+    /** 有成員正在下載或驗證。這段期間快取裡的檔案還在用，不能清 */
+    val busy: Boolean
+        get() = jobs.values.any { it is AppJob.Downloading || it == AppJob.Verifying }
+}
 
 /**
  * 目錄的狀態來源。
@@ -180,6 +186,37 @@ class CatalogViewModel(app: Application) : AndroidViewModel(app) {
             current.copy(entries = list)
         }
         order.save(_state.value.entries.filter { it.installed }.map { it.id })
+    }
+
+    /** 清掉拖曳排過的順序。要重新整理才會照名冊順序重排，光拿現有清單排不回去 */
+    fun resetOrder() {
+        order.clear()
+        refresh(force = false)
+    }
+
+    fun loadCacheSize() {
+        viewModelScope.launch {
+            val bytes = withContext(Dispatchers.IO) {
+                ApkDownloader.cacheBytes(getApplication())
+            }
+            _state.update { it.copy(cacheBytes = bytes) }
+        }
+    }
+
+    /**
+     * 清掉下載快取。
+     *
+     * 放在 ViewModel 而不是畫面裡，是因為要看得到下載工作：正在寫的 .part 被刪掉，
+     * 下載迴圈還會繼續 append，續傳的位移就全錯了。所以有工作在跑時直接不做。
+     */
+    fun clearDownloadCache() {
+        if (_state.value.busy) return
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { ApkDownloader.clear(getApplication()) }
+            // 殘檔沒了，目錄上的按鈕不該再寫「繼續下載」
+            refreshResumable()
+            loadCacheSize()
+        }
     }
 
     private fun merge(

@@ -7,6 +7,9 @@ object HubConfig {
     const val REGISTRY_URL =
         "https://raw.githubusercontent.com/ImitatedSky/routina/main/apps.json"
 
+    /** Hub 自己的 GitHub repo（`owner/repo`），設定頁的「在 GitHub 查看」指向這裡 */
+    const val HUB_REPO = "ImitatedSky/routina"
+
     /** 圖示等相對路徑以這裡為基準 */
     const val REGISTRY_BASE =
         "https://raw.githubusercontent.com/ImitatedSky/routina/main/"

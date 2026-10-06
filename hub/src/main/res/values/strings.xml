@@ -37,4 +37,36 @@
     <string name="job_verifying">正在驗證簽章…</string>
     <string name="job_handed_off">已交給系統安裝畫面，完成後回到這裡會自動更新狀態</string>
     <string name="job_needs_permission">還需要你允許 Routina 安裝應用程式。開啟之後回來按重試。</string>
+
+    <string name="action_settings">設定</string>
+    <string name="action_back">返回</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_clear">清除</string>
+    <string name="action_reset">重設</string>
+
+    <string name="settings_title">設定</string>
+
+    <string name="settings_section_permission">安裝權限</string>
+    <string name="settings_install_permission">允許安裝應用程式</string>
+    <string name="settings_install_granted">已允許</string>
+    <string name="settings_install_denied">未允許，安裝或更新成員前要先開啟</string>
+
+    <string name="settings_section_cache">下載快取</string>
+    <string name="settings_cache_title">下載的安裝檔</string>
+    <string name="settings_cache_size">共 %1$s</string>
+    <string name="settings_cache_empty">沒有暫存的安裝檔</string>
+    <string name="settings_cache_busy">下載中，完成後才能清除</string>
+    <string name="settings_cache_confirm_title">清除下載快取？</string>
+    <string name="settings_cache_confirm_body">會刪掉已下載和下載到一半的安裝檔，共 %1$s。之後安裝要重新下載。</string>
+
+    <string name="settings_section_order">排序</string>
+    <string name="settings_reset_order">重設已安裝的排序</string>
+    <string name="settings_reset_order_hint">回到名冊上的順序</string>
+    <string name="settings_reset_order_confirm_title">重設排序？</string>
+    <string name="settings_reset_order_confirm_body">已安裝的成員會回到名冊上的順序，拖曳排過的順序會清掉。</string>
+    <string name="settings_reset_order_done">已回到名冊順序</string>
+
+    <string name="settings_section_about">關於</string>
+    <string name="settings_version">Routina Hub 版本</string>
+    <string name="settings_registry">家族名冊來源</string>
 </resources>

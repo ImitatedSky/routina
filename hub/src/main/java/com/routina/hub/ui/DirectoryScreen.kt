@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -66,7 +67,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.routina.core.contract.FamilyScanner
 import com.routina.hub.R
 import com.routina.hub.catalog.AppJob
@@ -86,7 +86,7 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
+fun DirectoryScreen(viewModel: CatalogViewModel, onOpenSettings: () -> Unit) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -134,6 +134,12 @@ fun DirectoryScreen(viewModel: CatalogViewModel = viewModel()) {
                                 contentDescription = stringResource(R.string.action_refresh)
                             )
                         }
+                    }
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = stringResource(R.string.action_settings)
+                        )
                     }
                 }
             )
@@ -597,7 +603,7 @@ private fun EmptyState(registryError: String?, modifier: Modifier = Modifier) {
 }
 
 /** 位元組轉成人看得懂的大小。總數未知時顯示 -- 而不是一個假的數字 */
-private fun sizeText(bytes: Long): String = when {
+internal fun sizeText(bytes: Long): String = when {
     bytes <= 0 -> "--"
     bytes < 1024 -> "$bytes B"
     bytes < 1024 * 1024 -> "%.0f KB".format(bytes / 1024.0)
@@ -610,7 +616,7 @@ private fun sizeText(bytes: Long): String = when {
  * 指向 releases 而不是 repo 首頁：從目錄點過去，想看的是版本與更新內容，
  * 而不是原始碼。開不起來（裝置上沒有瀏覽器）就安靜略過——這只是個捷徑。
  */
-private fun openReleasesPage(context: android.content.Context, repo: String) {
+internal fun openReleasesPage(context: android.content.Context, repo: String) {
     runCatching {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/$repo/releases"))
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
