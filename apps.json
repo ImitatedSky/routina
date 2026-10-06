@@ -72,6 +72,18 @@
         "repo": "ImitatedSky/routina-tone",
         "assetPattern": "routina-tone-*.apk"
       }
+    },
+    {
+      "id": "glance",
+      "name": "Routina Glance",
+      "summary": "不開 App 也能看訊息，不留已讀",
+      "packageName": "com.routina.glance",
+      "icon": "icons/glance.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina-glance",
+        "assetPattern": "routina-glance-*.apk"
+      }
     }
   ]
 }
