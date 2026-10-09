@@ -84,6 +84,18 @@
         "repo": "ImitatedSky/routina-glance",
         "assetPattern": "routina-glance-*.apk"
       }
+    },
+    {
+      "id": "weave",
+      "name": "Routina Weave",
+      "summary": "筆記與知識圖譜",
+      "packageName": "com.routina.weave",
+      "icon": "icons/weave.png",
+      "source": {
+        "type": "github-release",
+        "repo": "ImitatedSky/routina-weave",
+        "assetPattern": "routina-weave-*.apk"
+      }
     }
   ]
 }
